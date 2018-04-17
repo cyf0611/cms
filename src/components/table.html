@@ -142,12 +142,17 @@
 </script>
 
 <script>
-    layui.use(['table'], function() {
+    function productsearch(productGroupId,start,limitsize) {
+
+    }
+
+    layui.use(['table','laypage'], function() {
         var table = layui.table,
             $ = layui.jquery,
             layer = layui.layer,
             form = layui.form,
-            laytpl = layui.laytpl;
+            laytpl = layui.laytpl,
+            laypage = layui.laypage; 
         var tableIns = table.render({
             elem: '#demo',
             height: 'full-135', //容器高度
@@ -211,6 +216,24 @@
                 // console.log(curr);
                 // //得到数据总量
                 // console.log(count);
+                
+                laypage.render({  
+                        elem:'layui-table-page1'  
+                        ,count: count
+                        ,curr:2  
+                        ,limit:30  
+                        ,layout: ['prev', 'page', 'next', 'skip','count','limit']  
+                        ,jump:function (obj,first) {  
+                            if(!first){  
+                                curnum = obj.curr;  
+                                limitcount = obj.limit;  
+                                //console.log("curnum"+curnum);  
+                                //console.log("limitcount"+limitcount);  
+                                //layer.msg(curnum+"-"+limitcount);  
+                                //productsearch(productGroupId,curnum,limitcount);  
+                            }  
+                        }  
+                    })  
             },
             loading: true,
             //method: 'post'
