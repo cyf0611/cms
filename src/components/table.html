@@ -260,8 +260,19 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
             if (layEvent === 'detail') { //查看
-                console.log(table.checkStatus('demo'));
-                //do somehing
+                var d = {
+                    user: data,
+                };
+                //do something
+                laytpl($('#edit-tpl').html()).render(d, function(html) {
+                    layer.open({
+                        type: 1,
+                        title: '查看数据',
+                        content: html,
+                        area: ['800px', '600px'],
+                        btn: ['关闭']
+                    });
+                });
             } else if (layEvent === 'del') { //删除
                 layer.confirm('真的删除行么', function(index) {
                     obj.del(); //删除对应行（tr）的DOM结构
@@ -278,18 +289,18 @@
                 laytpl($('#edit-tpl').html()).render(d, function(html) {
                     layer.open({
                         type: 1,
-                        title: '表单',
+                        title: '编辑数据',
                         content: html,
                         area: ['800px', '600px'],
-                        btn: ['提交', '重置', '取消'],
+                        btn: ['提交', '取消'],
                         yes: function(index, layero) {
                             editIndex = index;
                             $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
                         },
-                        btn2: function(index, layero) {
-                            $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
-                            return false;
-                        },
+                        // btn2: function(index, layero) {
+                        //     $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
+                        //     return false;
+                        // },
                         success: function() {
                             form.render(null, 'form-edit');
                         }
@@ -336,17 +347,13 @@
                         function(html) {
                             layer.open({
                                 type: 1,
-                                title: '表单',
+                                title: '新增数据',
                                 content: html,
                                 area: ['800px', '600px'],
-                                btn: ['提交', '重置', '取消'],
+                                btn: ['提交', '取消'],
                                 yes: function(index, layero) {
                                     editIndex = index;
                                     $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
-                                },
-                                btn2: function(index, layero) {
-                                    $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
-                                    return false;
                                 },
                                 success: function() {
                                     form.render(null, 'form-edit');
