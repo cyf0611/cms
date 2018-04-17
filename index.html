@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>KIT ADMIN</title>
+    <title>后台订单管理系统</title>
     <link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="./plugins/font-awesome/css/font-awesome.min.css" media="all">
     <link rel="stylesheet" href="./src/css/app.css" media="all">
@@ -14,7 +13,7 @@
 <body class="kit-theme">
     <div class="layui-layout layui-layout-admin kit-layout-admin">
         <div class="layui-header">
-            <div class="layui-logo">KIT ADMIN</div>
+            <div class="layui-logo">后台订单管理系统</div>
             <div class="layui-logo kit-logo-mobile">K</div>
             <ul class="layui-nav layui-layout-left kit-nav">
                 
@@ -22,7 +21,7 @@
             <ul class="layui-nav layui-layout-right kit-nav">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        <img src="static/images/1.jpg" class="layui-nav-img"> Van
+                        <img src="static/images/1.jpg" class="layui-nav-img"> Admin
                     </a>
                     <!--<dl class="layui-nav-child">
                         <dd><a href="javascript:;" kit-target data-options="{url:'basic.html',icon:'&#xe658;',title:'基本资料',id:'966'}"><span>基本资料</span></a></dd>
@@ -38,19 +37,22 @@
                 <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar>
-                    <li class="layui-nav-item">
-                        <a href="javascript:;" kit-target data-options="{url:'src/main.html',icon:'&#xe6c6;',title:'首页',id:'0'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
+                    <li class="layui-nav-item layui-this">
+                        <a class="index_bar" href="javascript:;" kit-target data-options="{url:'src/main.html',icon:'&#xe6c6;',title:'首页',id:'0'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
                     </li>
                     <li class="layui-nav-item  layui-nav-itemed">
                         <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 所有产品</span></a>
                         <dl class="layui-nav-child">
-                            <dd>
-                                <a href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
-                                    <i class="layui-icon">&#xe6c6;</i><span> 产品1</span></a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" data-url="ztree.html" data-icon="&#xe628;" data-title="ZTree" kit-target data-id='2'><i class="layui-icon">&#xe628;</i><span> 产品2</span></a>
-                            </dd>
+                            <a class="pro1 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
+                                <dd>
+                                    <i class="layui-icon">&#xe6c6;</i><span> 产品1</span></a> 
+                                </dd>   
+                            </a>
+                            <a class="pro2 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
+                                <dd>
+                                    <i class="layui-icon">&#xe628;</i><span> 产品2</span></a>
+                                </dd>   
+                            </a>
                             
                         </dl>
                     </li>
@@ -60,7 +62,7 @@
         </div>
         <div class="layui-body" id="container">
             <!-- 内容主体区域 -->
-            <div style="padding: 15px;"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63e;</i> 请稍等...</div>
+            <!--<div style="padding: 15px;"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63e;</i> 请稍等...</div>-->
             
         </div>
 
@@ -86,8 +88,18 @@
             app.set({
               type: 'spa'
             }).init();
+
+            $('.index_bar').click();
+
+
+
+
+
             
         });
+
+
+
     </script>
 </body>
 

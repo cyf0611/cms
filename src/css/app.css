@@ -421,7 +421,7 @@ button {
 }
 
 /*分页居中*/
-#layui-table-page1 {
+.layui-table-page>div {
     text-align: center;
 }
 
@@ -449,21 +449,26 @@ button {
 .info-box .info-box-content {
     padding: 5px 10px;
     margin-left: 85px;
+    text-align: center;
 }
 
 .info-box .info-box-content .info-box-text {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: uppercase;
+    font-weight: 600;
 }
 
 .info-box .info-box-content .info-box-number {
     display: block;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 30px;
+    color: red;
+    text-align: center;
+    line-height: 50px;
 }
 
 .major {
@@ -477,4 +482,8 @@ button {
 
 .main .layui-row {
     margin: 10px 0;
+}
+
+.layui-nav-child>a {
+    display: none!important;
 }
