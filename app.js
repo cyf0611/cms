@@ -78,39 +78,8 @@ app.all('/*', function(req, res) {
 
 
 
-
-
-    // else if (fileUrl.indexOf('.css')>-1) {
-    //     res.writeHead(200, {'Content-Type': 'text/css'});
-    //     res.end(get_file_content(path.join(__dirname, fileUrl)));
-    // }else if(fileUrl.indexOf('.json')>-1) {
-    //     res.writeHead(200, {'Content-Type': 'text/json'});
-    //     res.end(get_file_content(path.join(__dirname, fileUrl)));
-    // }else if (fileUrl.indexOf('.js')>-1) {
-    //     res.writeHead(200, {'Content-Type': 'text/javascript'});
-    //     res.end(get_file_content(path.join(__dirname, fileUrl)));
-    // }else if (['gif', 'jpeg', 'jpg', 'png', 'woff', 'woff2'].indexOf(suffix)>-1) {
-    //     res.writeHead(200, {'Content-Type': 'image/'+suffix});
-    //     res.end(get_file_content(path.join(__dirname, fileUrl)));
-    // }else if (['/index','/components/table'].indexOf(fileUrl)>-1) {
-    //     fs.readFile(path.join(__dirname,fileUrl+'.html'),(err,data)=>{
-    //         if (err) {
-    //           console.log(err);
-    //         }
-    //         //设置响应头
-    //         res.setHeader("Content-Type","text/html;charset=utf-8");
-    //         //返回数据
-    //         res.end(data);
-    //     })
-    // }
-
-
    
 })
-
-function get_file_content(filepath){
-    return fs.readFileSync(filepath);
-}
 
 app.listen(9999);//设置监听端口和监听地址
 
