@@ -29,7 +29,7 @@
                         <dd><a href="javascript:;">安全设置</a></dd>
                     </dl>-->
                 </li>
-                <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
+                <li class="layui-nav-item"><a href="/login.html"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
             </ul>
         </div>
 
@@ -39,27 +39,19 @@
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                 <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar>
                     <li class="layui-nav-item">
-                        <a href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
+                        <a href="javascript:;" kit-target data-options="{url:'src/main.html',icon:'&#xe6c6;',title:'首页',id:'0'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
                     </li>
                     <li class="layui-nav-item  layui-nav-itemed">
-                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 基本元素</span></a>
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 所有产品</span></a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" kit-target data-options="{url:'components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
-                                    <i class="layui-icon">&#xe6c6;</i><span> 表格</span></a>
+                                <a href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
+                                    <i class="layui-icon">&#xe6c6;</i><span> 产品1</span></a>
                             </dd>
                             <dd>
-                                <a href="javascript:;" data-url="ztree.html" data-icon="&#xe628;" data-title="ZTree" kit-target data-id='2'><i class="layui-icon">&#xe628;</i><span> ZTree</span></a>
+                                <a href="javascript:;" data-url="ztree.html" data-icon="&#xe628;" data-title="ZTree" kit-target data-id='2'><i class="layui-icon">&#xe628;</i><span> 产品2</span></a>
                             </dd>
-                            <dd>
-                                <a href="javascript:;" data-url="page2.html" data-icon="&#xe628;" data-title="页面2" kit-target data-id='3'><i class="layui-icon">&#xe628;</i><span> 页面2</span></a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" data-url="page3.html" data-icon="&#xe614;" data-title="页面3" kit-target data-id='4'><i class="layui-icon">&#xe614;</i><span> 页面3</span></a>
-                            </dd>
-                            <dd>
-                                <a href="javascript:;" kit-target data-options="{url:'page4.html',icon:'&#xe658;',title:'页面4',id:'5'}"><i class="layui-icon">&#xe658;</i><span> 页面4</span></a>
-                            </dd>
+                            
                         </dl>
                     </li>
                     
@@ -68,8 +60,8 @@
         </div>
         <div class="layui-body" id="container">
             <!-- 内容主体区域 -->
-            <!-- <div style="padding: 15px;"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63e;</i> 请稍等...</div> -->
-            <div style="padding: 15px;">点击左侧菜单加载...</div>
+            <div style="padding: 15px;"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63e;</i> 请稍等...</div>
+            
         </div>
 
         <div class="layui-footer">
@@ -89,19 +81,12 @@
             var app = layui.app,
                 $ = layui.jquery,
                 layer = layui.layer;
+
             //主入口
             app.set({
-                type: 'spa'
+              type: 'spa'
             }).init();
-            $('#pay').on('click', function() {
-                layer.open({
-                    title: false,
-                    type: 1,
-                    content: '<img src="/src/images/pay.png" />',
-                    area: ['500px', '250px'],
-                    shadeClose: true
-                });
-            });
+            
         });
     </script>
 </body>
