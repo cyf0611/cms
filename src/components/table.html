@@ -83,80 +83,54 @@
         <form class="layui-form" action="" lay-filter="form-edit">
             <input type="hidden" name="id" value="{{d.user.id}}" />
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名</label>
+                <label class="layui-form-label">订单时间</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required lay-verify="required" value="{{d.user.username}}" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    <input type="text" name="username" required lay-verify="required" value="{{d.user.submitTime}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">密码框</label>
+                <label class="layui-form-label">产品描述</label>
                 <div class="layui-input-inline">
-                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">辅助文字</div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">单选框</label>
-                <div class="layui-input-block">
-                    {{# var woman = d.user.sex === 0?'checked':'';}} {{# var man = d.user.sex === 1?'checked':'';}}
-                    <input type="radio" name="sex" value="男" title="男" {{man}} />
-                    <input type="radio" name="sex" value="女" title="女" {{woman}} />
+                    <input type="text" name="password" required lay-verify="required" value="{{d.user.describe}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">城市</label>
+                <label class="layui-form-label">姓名</label>
                 <div class="layui-input-block">
-                    <select name="city" lay-verify="required">
-                      <option value=""></option>
-                      {{# layui.each(d.citys,function(index,item){ }}                      
-                      {{# if(item.id===d.user.city){}}
-                      <option value="{{item.id}}" selected>{{item.name}}</option>
-                      {{#}else{}}
-                      <option value="{{item.id}}">{{item.name}}</option>
-                      {{#};}}
-                      {{# }); }}
-                    </select>
+                    <input type="text" name="username" required lay-verify="required" value="{{d.user.name}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">积分</label>
+                <label class="layui-form-label">联系方式</label>
                 <div class="layui-input-block">
-                    <input type="number" name="experience" required lay-verify="required" value="{{d.user.experience}}" placeholder="请输入积分" autocomplete="off" class="layui-input">
+                   <input type="text" name="username" required lay-verify="required" value="{{d.user.tel}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">评分</label>
+                <label class="layui-form-label">省</label>
                 <div class="layui-input-block">
-                    <input type="number" name="score" required lay-verify="required" value="{{d.user.score}}" placeholder="请输入评分" autocomplete="off" class="layui-input">
+                    <input type="text" name="experience" required lay-verify="required" value="{{d.user.province}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">财富</label>
+                <label class="layui-form-label">市</label>
                 <div class="layui-input-block">
-                    <input type="number" name="wealth" required lay-verify="required" value="{{d.user.wealth}}" placeholder="请输入财富" autocomplete="off" class="layui-input">
+                    <input type="text" name="score" required lay-verify="required" value="{{d.user.city}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">职业</label>
+                <label class="layui-form-label">区</label>
                 <div class="layui-input-block">
-                    <select name="classify" lay-verify="required">
-                        <option value=""></option>                        
-                      {{# layui.each(d.classifies,function(index,item){ }}
-                      {{# if(item.id===d.user.classify){}}
-                      <option value="{{item.id}}" selected>{{item.name}}</option>
-                      {{#}else{}}
-                      <option value="{{item.id}}">{{item.name}}</option>
-                      {{#};}}
-                      {{# }); }}
-                    </select>
+                    <input type="text" name="wealth" required lay-verify="required" value="{{d.user.area}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">签名</label>
+            <div class="layui-form-item">
+                <label class="layui-form-label">详细地址</label>
                 <div class="layui-input-block">
-                    <textarea name="sign" placeholder="请输入个性签名" class="layui-textarea">{{d.user.sign}}</textarea>
+                    <input type="text" name="wealth" required lay-verify="required" value="{{d.user.address}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
+            
             <div class="layui-form-item" style="display:none;">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit lay-filter="formEdit">立即提交</button>
@@ -187,7 +161,7 @@
                 }, {
                     field: 'id',
                     title: 'ID',
-                    width: 40
+                    width: 60
                 }, {
                     field: 'submitTime',
                     title: '订单时间',
@@ -196,7 +170,7 @@
                 }, {
                     field: 'describe',
                     title: '产品描述',
-                    width: 80
+                    width: 190
                 }, {
                     field: 'name',
                     title: '姓名',
@@ -204,18 +178,18 @@
                 }, {
                     field: 'tel',
                     title: '联系方式',
-                    width: 177
+                    width: 120
                 }, {
                     field: 'province',
-                    title: '所在省份',
+                    title: '省',
                     width: 80
                 }, {
                     field: 'city',
-                    title: '所在城市',
+                    title: '市',
                     width: 80
                 }, {
                     field: 'area',
-                    title: '所在地区',
+                    title: '区',
                     width: 80
                 }, {
                     field: 'address',
@@ -345,17 +319,14 @@
                 case 'add':
                     var d = {
                         user: {
-                            sign: '',
+                            submitTime: Date.parse(new Date()),
+                            describe: '',
+                            name: '',
+                            tel: '',
+                            province: '',
                             city: '',
-                            classify: '',
-                            experience: '',
-                            id: 0,
-                            logins: '',
-                            score: '',
-                            sex: 1,
-                            sign: '',
-                            username: '',
-                            wealth: ''
+                            area: '',
+                            address: ''
                         },
                         citys: staticData.citys,
                         classifies: staticData.classifies
