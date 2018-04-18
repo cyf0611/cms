@@ -142,266 +142,219 @@
 </script>
 
 <script>
+    var limitcount = 20;  
+    var curnum = 1;
+    productsearch(1,curnum);
     function productsearch(productGroupId,start,limitsize) {
+        console.log(start);
+        layui.use(['table','laypage'], function() {
+            var table = layui.table,
+                $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form,
+                laytpl = layui.laytpl,
+                laypage = layui.laypage; 
 
-    }
 
-    layui.use(['table','laypage'], function() {
-        var table = layui.table,
-            $ = layui.jquery,
-            layer = layui.layer,
-            form = layui.form,
-            laytpl = layui.laytpl,
-            laypage = layui.laypage; 
-        var tableIns = table.render({
-            elem: '#demo',
-            height: 'full-135', //容器高度
-            url: '../datas/table.json',
-            page: true,
-            id: 'demo',
-            cols: [
-                [{
-                    checkbox: true,
-                    fixed: true
-                }, {
-                    field: 'id',
-                    title: 'ID',
-                    width: 60
-                }, {
-                    field: 'submitTime',
-                    title: '订单时间',
-                    width: 80,
-                    sort: true
-                }, {
-                    field: 'describe',
-                    title: '产品描述',
-                    width: 190
-                }, {
-                    field: 'name',
-                    title: '姓名',
-                    width: 80
-                }, {
-                    field: 'tel',
-                    title: '联系方式',
-                    width: 120
-                }, {
-                    field: 'province',
-                    title: '省',
-                    width: 80
-                }, {
-                    field: 'city',
-                    title: '市',
-                    width: 80
-                }, {
-                    field: 'area',
-                    title: '区',
-                    width: 80
-                }, {
-                    field: 'address',
-                    title: '详细地址',
-                    width: 135,
-                }, {
-                    fixed: 'right',
-                    title: '操作',
-                    width: 150,
-                    align: 'center',
-                    toolbar: '#barDemo'
-                }]
-            ],
-            done: function(res, curr, count) {
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                // console.log(res);
-                // //得到当前页码
-                // console.log(curr);
-                // //得到数据总量
-                // console.log(count);
-                
-                laypage.render({  
-                        elem:'layui-table-page1'  
-                        ,count: count
-                        ,curr:2  
-                        ,limit:30  
-                        ,layout: ['prev', 'page', 'next', 'skip','count','limit']  
-                        ,jump:function (obj,first) {  
-                            if(!first){  
-                                curnum = obj.curr;  
-                                limitcount = obj.limit;  
-                                //console.log("curnum"+curnum);  
-                                //console.log("limitcount"+limitcount);  
-                                //layer.msg(curnum+"-"+limitcount);  
-                                //productsearch(productGroupId,curnum,limitcount);  
-                            }  
-                        }  
-                    })  
-            },
-            loading: true,
-            //method: 'post'
-        });
-        var staticData = {
-            citys: [{
-                id: 0,
-                name: '北京'
-            }, {
-                id: 1,
-                name: '广州'
-            }, {
-                id: 2,
-                name: '深圳'
-            }, {
-                id: 3,
-                name: '杭州'
-            }],
-            classifies: [{
-                id: 0,
-                name: '词人'
-            }, {
-                id: 1,
-                name: '诗人'
-            }, {
-                id: 2,
-                name: '作家'
-            }, {
-                id: 3,
-                name: '酱油'
-            }]
-        };
-        //监听搜索表单提交
-        form.on('submit(search)', function(data) {
-            console.log(data.field);
-            layer.msg(JSON.stringify(data.field));
-            //带条件查询
-            tableIns.reload({
-                where: data.field
+            var tableIns = table.render({
+                elem: '#demo',
+                height: 'full-135', //容器高度
+                url: '/api/tableData?pId='+productGroupId,
+                page: true, 
+                id: 'demo',
+                cols: [
+                    [{
+                        checkbox: true,
+                        fixed: true
+                    }, {
+                        field: 'id',
+                        title: 'ID',
+                        width: 60
+                    }, {
+                        field: 'submitTime',
+                        title: '订单时间',
+                        width: 80,
+                        sort: true
+                    }, {
+                        field: 'describe',
+                        title: '产品描述',
+                        width: 190
+                    }, {
+                        field: 'name',
+                        title: '姓名',
+                        width: 80
+                    }, {
+                        field: 'tel',
+                        title: '联系方式',
+                        width: 120
+                    }, {
+                        field: 'province',
+                        title: '省',
+                        width: 80
+                    }, {
+                        field: 'city',
+                        title: '市',
+                        width: 80
+                    }, {
+                        field: 'area',
+                        title: '区',
+                        width: 80
+                    }, {
+                        field: 'address',
+                        title: '详细地址',
+                        width: 135,
+                    }, {
+                        fixed: 'right',
+                        title: '操作',
+                        width: 150,
+                        align: 'center',
+                        toolbar: '#barDemo'
+                    }]
+                ],
+                done: function(res, curr, count) {
+                    
+                },
+                loading: true,
+                //method: 'post'
             });
-            return false;
-        });
-        //监听工具条
-        table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-            var data = obj.data; //获得当前行数据
-            var layEvent = obj.event; //获得 lay-event 对应的值
-            var tr = obj.tr; //获得当前行 tr 的DOM对象
+          
+            //监听搜索表单提交
+            form.on('submit(search)', function(data) {
+                console.log(data.field);
+                layer.msg(JSON.stringify(data.field));
+                //带条件查询
+                tableIns.reload({
+                    where: data.field
+                });
+                return false;
+            });
+            //监听工具条
+            table.on('tool(demo)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-            if (layEvent === 'detail') { //查看
-                var d = {
-                    user: data,
-                };
-                //do something
-                laytpl($('#edit-tpl').html()).render(d, function(html) {
-                    layer.open({
-                        type: 1,
-                        title: '查看数据',
-                        content: html,
-                        area: ['800px', '600px'],
-                        btn: ['关闭']
-                    });
-                });
-            } else if (layEvent === 'del') { //删除
-                layer.confirm('真的删除行么', function(index) {
-                    obj.del(); //删除对应行（tr）的DOM结构
-                    layer.close(index);
-                    //向服务端发送删除指令
-                });
-            } else if (layEvent === 'edit') { //编辑
-                var d = {
-                    user: data,
-                    citys: staticData.citys,
-                    classifies: staticData.classifies
-                };
-                //do something
-                laytpl($('#edit-tpl').html()).render(d, function(html) {
-                    layer.open({
-                        type: 1,
-                        title: '编辑数据',
-                        content: html,
-                        area: ['800px', '600px'],
-                        btn: ['提交', '取消'],
-                        yes: function(index, layero) {
-                            editIndex = index;
-                            $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
-                        },
-                        // btn2: function(index, layero) {
-                        //     $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
-                        //     return false;
-                        // },
-                        success: function() {
-                            form.render(null, 'form-edit');
-                        }
-                    });
-                });
-                //同步更新缓存对应的值
-                // obj.update({
-                //     username: '123',
-                //     title: 'xxx'
-                // });
-            }
-        });
-        form.render(null, 'kit-search-form');
-        // $('#kit-search-more').on('click', function() {
-        //     $('.kit-search-mored').toggle();
-        // });
-        var editIndex;
-        form.on('submit(formEdit)', function(data) {
-            layer.msg('formEdit');
-            editIndex && layer.close(editIndex); //关闭弹出层
-            return false;
-        });
-        $('.kit-search-btns').children('a').off('click').on('click', function() {
-            var $that = $(this),
-                action = $that.data('action');
-            switch (action) {
-                case 'add':
+                if (layEvent === 'detail') { //查看
                     var d = {
-                        user: {
-                            submitTime: Date.parse(new Date()),
-                            describe: '',
-                            name: '',
-                            tel: '',
-                            province: '',
-                            city: '',
-                            area: '',
-                            address: ''
-                        },
-                        citys: staticData.citys,
-                        classifies: staticData.classifies
+                        user: data,
                     };
-                    //渲染
-                    laytpl($('#edit-tpl').html()).render(d,
-                        function(html) {
-                            layer.open({
-                                type: 1,
-                                title: '新增数据',
-                                content: html,
-                                area: ['800px', '600px'],
-                                btn: ['提交', '取消'],
-                                yes: function(index, layero) {
-                                    editIndex = index;
-                                    $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
-                                },
-                                success: function() {
-                                    form.render(null, 'form-edit');
-                                }
-                            });
+                    //do something
+                    laytpl($('#edit-tpl').html()).render(d, function(html) {
+                        layer.open({
+                            type: 1,
+                            title: '查看数据',
+                            content: html,
+                            area: ['800px', '600px'],
+                            btn: ['关闭']
                         });
-                    break;
-                case 'del-bulk':
-                    var d = table.checkStatus('demo');
-                    if (d.data.length === 0) {
-                        layer.msg('请选择要删除的数据');
-                        return;
-                    }
-                    var data = d.data,
-                        names = [],
-                        ids = [];
-                    layui.each(data, function(index, item) {
-                        console.log(item);
-                        names.push(item.username);
-                        ids.push(item.id);
                     });
-                    layer.msg(names.join(','));
-                    console.log(ids.join(','));
-                    break;
-            }
-        });
-    });
+                } else if (layEvent === 'del') { //删除
+                    layer.confirm('真的删除行么', function(index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+                        layer.close(index);
+                        //向服务端发送删除指令
+                    });
+                } else if (layEvent === 'edit') { //编辑
+                    var d = {
+                        user: data,
+                    };
+                    //do something
+                    laytpl($('#edit-tpl').html()).render(d, function(html) {
+                        layer.open({
+                            type: 1,
+                            title: '编辑数据',
+                            content: html,
+                            area: ['800px', '600px'],
+                            btn: ['提交', '取消'],
+                            yes: function(index, layero) {
+                                editIndex = index;
+                                $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
+                            },
+                            // btn2: function(index, layero) {
+                            //     $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
+                            //     return false;
+                            // },
+                            success: function() {
+                                form.render(null, 'form-edit');
+                            }
+                        });
+                    });
+                    //同步更新缓存对应的值
+                    // obj.update({
+                    //     username: '123',
+                    //     title: 'xxx'
+                    // });
+                }
+            });
+            form.render(null, 'kit-search-form');
+            // $('#kit-search-more').on('click', function() {
+            //     $('.kit-search-mored').toggle();
+            // });
+            var editIndex;
+            form.on('submit(formEdit)', function(data) {
+                layer.msg('formEdit');
+                editIndex && layer.close(editIndex); //关闭弹出层
+                return false;
+            });
+            $('.kit-search-btns').children('a').off('click').on('click', function() {
+                var $that = $(this),
+                    action = $that.data('action');
+                switch (action) {
+                    case 'add':
+                        var d = {
+                            user: {
+                                submitTime: Date.parse(new Date()),
+                                describe: '',
+                                name: '',
+                                tel: '',
+                                province: '',
+                                city: '',
+                                area: '',
+                                address: ''
+                            }
+                        };
+                        //渲染
+                        laytpl($('#edit-tpl').html()).render(d,
+                            function(html) {
+                                layer.open({
+                                    type: 1,
+                                    title: '新增数据',
+                                    content: html,
+                                    area: ['800px', '600px'],
+                                    btn: ['提交', '取消'],
+                                    yes: function(index, layero) {
+                                        editIndex = index;
+                                        $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
+                                    },
+                                    success: function() {
+                                        form.render(null, 'form-edit');
+                                    }
+                                });
+                            });
+                        break;
+                    case 'del-bulk':
+                        var d = table.checkStatus('demo');
+                        if (d.data.length === 0) {
+                            layer.msg('请选择要删除的数据');
+                            return;
+                        }
+                        var data = d.data,
+                            names = [],
+                            ids = [];
+                        layui.each(data, function(index, item) {
+                            console.log(item);
+                            names.push(item.username);
+                            ids.push(item.id);
+                        });
+                        layer.msg(names.join(','));
+                        console.log(ids.join(','));
+                        break;
+                }
+            });
+        }); 
+     }
+        
+    
+
+    
 </script>

@@ -20,7 +20,8 @@ var connection = mysql.createConnection({
     host     : '127.0.0.1',
     user     : 'root',
     password : '123456',
-    database : 'nodetext'
+    database : 'nodetext',
+    multipleStatements: true
 });
 connection.connect();
 
@@ -53,20 +54,30 @@ app.post('/*', function(req, res) {
 })
 
 app.all('/*', function(req, res) {
-    var fileUrl = req.url.split('?')[0]
+    var fileUrl = req.url.split('?')[0];
     var filename = fileUrl.split('/')[fileUrl.split('/').length-1];
     var suffix = fileUrl.split('.')[fileUrl.split('.').length-1];
 
-    if(req.url==='/login'){
-        fs.readFile(path.join(__dirname,'./login.html'),(err,data)=>{
-            if (err) {
-              console.log(err);
-            }
-            //设置响应头
-            res.setHeader("Content-Type","text/html;charset=utf-8");
-            //返回数据
-            res.end(data);
-        })
+    if(fileUrl==='/api/tableData'){
+        var parmas = req.url.split('?')[1];
+        var obj = querystring.parse(parmas);
+
+        switch (Number(obj.pId)){
+            case 1:
+                connection.query('SELECT COUNT(*) FROM formdata;SELECT * FROM formdata limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';', function (err, results){
+                    if (err) throw err;
+                    res.setHeader("Content-Type",'text/json');
+                    var reqArr = {
+                        code: '',
+                        msg: '',
+                        count: results[0][0]['COUNT(*)'],
+                        data: results[1]
+                    };
+                    
+                    res.end(JSON.stringify(reqArr));
+                })
+                break;
+        }
     }else {
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) console.log(err);
