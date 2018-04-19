@@ -7,7 +7,7 @@
             </div>
             <div class="kit-search-inputs">
                 <div class="kit-search-keyword">
-                    <input type="text" id="searchKeyword" class="layui-input" name="keyword" placeholder="搜索关键字.." />
+                    <input type="text" id="searchKeyword" class="layui-input" required lay-verify="required" name="keyword" placeholder="搜索关键字.."/>
                     <button lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                 </div>
                 
@@ -93,10 +93,7 @@
     var limitcount = 20;  
     var curnum = 1;
     var productGroupId = 1
-    productsearch(1,curnum);
-    function productsearch(productGroupId,start,limitsize) {
-         
-     }
+    
      layui.use(['table','laypage'], function() {
             var table = layui.table,
                 $ = layui.jquery,
@@ -170,11 +167,10 @@
           
             //监听搜索表单提交
             form.on('submit(search)', function(data) {
-                console.log(data.field);
-                layer.msg(JSON.stringify(data.field));
+                var result = data.field.keyword.replace();
                 //带条件查询
                 tableIns.reload({
-                    url: '/api/search?pId='+productGroupId+'&keyword=' + $('#searchKeyword').val()
+                    url: '/api/search?pId='+productGroupId+'&keyword=' + result
                 });
                 return false;
             });
