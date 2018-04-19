@@ -57,14 +57,17 @@ app.all('/*', function(req, res) {
     var fileUrl = req.url.split('?')[0];
     var filename = fileUrl.split('/')[fileUrl.split('/').length-1];
     var suffix = fileUrl.split('.')[fileUrl.split('.').length-1];
+    var fieldArr = ['formdata'];
+    
     // 订单总数据接口
     if(fileUrl==='/api/tableData'){
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
-
+        var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
+        var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';'
         switch (Number(obj.pId)){
             case 1:
-                connection.query('SELECT COUNT(*) FROM formdata;SELECT * FROM formdata limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';', function (err, results){
+                connection.query(sql, function (err, results){
                     if (err) throw err;
                     res.setHeader("Content-Type",'text/json');
                     var reqArr = {
@@ -81,8 +84,8 @@ app.all('/*', function(req, res) {
     }else if(fileUrl==='/api/search') { // 按照条件搜索订单接口
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
-        var currField = ['formdata'][obj.pId-1]; // 不同产品数据表的数组 1formdata
-        var sql = "select COUNT(*) from "+currField+" where tel regexp "+obj.keyword+";select * from "+currField+" where tel regexp "+obj.keyword+" LIMIT "+ (obj.page-1)*obj.limit + ','+obj.limit;
+        var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
+        var sql = "select COUNT(*) from "+currField+" where tel regexp "+obj.keyword+" and status = 1;select * from "+currField+" where tel regexp "+obj.keyword+" and status = 1 LIMIT "+ (obj.page-1)*obj.limit + ','+obj.limit;
         connection.query(sql, function (err, results){
                     if (err) throw err;
                     res.setHeader("Content-Type",'text/json');
@@ -94,6 +97,20 @@ app.all('/*', function(req, res) {
                     };
                     res.end(JSON.stringify(reqArr));
                 })
+    }else if(fileUrl==='/api/del') {// 删除某条数据
+        var parmas = req.url.split('?')[1];
+        var obj = querystring.parse(parmas);
+        var currField = fieldArr[obj.pId-1];
+        var sql = 'UPDATE '+currField+' set status = 0 where id = ' + obj.id;
+        connection.query(sql, function(err, result) {
+            if (err) throw err;
+            res.setHeader("Content-Type",'text/json');
+            var reqArr = {
+                code: '',
+                msg: 'del success'
+            };
+            res.end(JSON.stringify(reqArr));
+        })
     }else {
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) console.log(err);
