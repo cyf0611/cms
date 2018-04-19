@@ -421,10 +421,7 @@ button {
 }
 
 /*分页居中*/
-.layui-table-page {
-    
-    background-color: #fff;
-}
+
 .layui-table-page>div {
     text-align: center;
 }

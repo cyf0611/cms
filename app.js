@@ -57,7 +57,7 @@ app.all('/*', function(req, res) {
     var fileUrl = req.url.split('?')[0];
     var filename = fileUrl.split('/')[fileUrl.split('/').length-1];
     var suffix = fileUrl.split('.')[fileUrl.split('.').length-1];
-
+    // 订单总数据接口
     if(fileUrl==='/api/tableData'){
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
@@ -78,6 +78,22 @@ app.all('/*', function(req, res) {
                 })
                 break;
         }
+    }else if(fileUrl==='/api/search') { // 按照条件搜索订单接口
+        var parmas = req.url.split('?')[1];
+        var obj = querystring.parse(parmas);
+        var currField = ['formdata'][obj.pId-1]; // 不同产品数据表的数组 1formdata
+        var sql = "select COUNT(*) from "+currField+" where tel regexp "+obj.keyword+";select * from "+currField+" where tel regexp "+obj.keyword+" LIMIT "+ (obj.page-1)*obj.limit + ','+obj.limit;
+        connection.query(sql, function (err, results){
+                    if (err) throw err;
+                    res.setHeader("Content-Type",'text/json');
+                    var reqArr = {
+                        code: '',
+                        msg: '',
+                        count: results[0][0]['COUNT(*)'],
+                        data: results[1]
+                    };
+                    res.end(JSON.stringify(reqArr));
+                })
     }else {
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) console.log(err);

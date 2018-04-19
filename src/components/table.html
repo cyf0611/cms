@@ -7,65 +7,13 @@
             </div>
             <div class="kit-search-inputs">
                 <div class="kit-search-keyword">
-                    <input type="text" class="layui-input" name="keyword" placeholder="搜索关键字.." />
+                    <input type="text" id="searchKeyword" class="layui-input" name="keyword" placeholder="搜索关键字.." />
                     <button lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                 </div>
                 
             </div>
         </div>
-        <div class="kit-search-mored layui-anim layui-anim-upbit">
-            <div class="kit-search-body">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">输入框</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">验证手机</label>
-                        <div class="layui-input-inline">
-                            <input type="tel" name="phone" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">验证邮箱</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="email" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">范围</label>
-                        <div class="layui-input-inline" style="width: 100px;">
-                            <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
-                        </div>
-                        <div class="layui-form-mid">-</div>
-                        <div class="layui-input-inline" style="width: 100px;">
-                            <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">单行选择框</label>
-                    <div class="layui-input-block">
-                        <select name="interest" lay-filter="aihao">
-                            <option value=""></option>
-                            <option value="0">写作</option>
-                            <option value="1" selected="">阅读</option>
-                            <option value="2">游戏</option>
-                            <option value="3">音乐</option>
-                            <option value="4">旅行</option>
-                          </select>
-                    </div>
-                </div>
-            </div>
-            <div class="kit-search-footer">
-                <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary kit-btn">重置</button>
-                <button lay-submit lay-filter="search" class="layui-btn layui-btn-sm kit-btn">确定</button>
-            </div>
-        </div>
+        
     </form>
     <div class="kit-table-body">
         <table id="demo" lay-filter="demo"></table>
@@ -144,10 +92,12 @@
 <script>
     var limitcount = 20;  
     var curnum = 1;
+    var productGroupId = 1
     productsearch(1,curnum);
     function productsearch(productGroupId,start,limitsize) {
-        console.log(start);
-        layui.use(['table','laypage'], function() {
+         
+     }
+     layui.use(['table','laypage'], function() {
             var table = layui.table,
                 $ = layui.jquery,
                 layer = layui.layer,
@@ -224,7 +174,7 @@
                 layer.msg(JSON.stringify(data.field));
                 //带条件查询
                 tableIns.reload({
-                    where: data.field
+                    url: '/api/search?pId='+productGroupId+'&keyword=' + $('#searchKeyword').val()
                 });
                 return false;
             });
@@ -351,9 +301,7 @@
                         break;
                 }
             });
-        }); 
-     }
-        
+        });   
     
 
     
