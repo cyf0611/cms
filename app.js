@@ -101,12 +101,13 @@ app.all('/*', function(req, res) {
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1];
-        var sql = 'UPDATE '+currField+' set status = 0 where id = ' + obj.id;
+        var sql = 'UPDATE '+currField+' set status = 0 where id in (' + obj.id + ')';
+        console.log(sql);
         connection.query(sql, function(err, result) {
             if (err) throw err;
             res.setHeader("Content-Type",'text/json');
             var reqArr = {
-                code: '',
+                code: '1',
                 msg: 'del success'
             };
             res.end(JSON.stringify(reqArr));

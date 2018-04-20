@@ -196,9 +196,10 @@
                         });
                     });
                 } else if (layEvent === 'del') { //删除
-                    layer.confirm('真的删除行么', function(index) {
+                    layer.confirm('真的要删除这条数据吗', function(index) {
                         obj.del(); //删除对应行（tr）的DOM结构
                         layer.close(index);
+                        console.log(obj);
                         //向服务端发送删除指令
                         $.get('/api/del?pId='+productGroupId+'&id='+data.id, function (data){
                             //console.log(data)
@@ -288,16 +289,36 @@
                             layer.msg('请选择要删除的数据');
                             return;
                         }
-                        var data = d.data,
-                            names = [],
+                        layer.confirm('真的要删除选中的数据吗', function (index){
+                            var data = d.data,
                             ids = [];
-                        layui.each(data, function(index, item) {
-                            console.log(item);
-                            names.push(item.username);
-                            ids.push(item.id);
-                        });
-                        layer.msg(names.join(','));
-                        console.log(ids.join(','));
+                            layui.each(data, function(index, item) {
+                                ids.push(item.id);
+                            });
+
+                            // 删除当前选中行
+                            var tableContainer = $('div[lay-filter="LAY-table-1"]');
+                            tableContainer.find('input[name="layTableCheckbox"]:checked').each(function(){
+                                var that = this;
+                                // 页面表由多个table组合而成 获取当前行的索引以后 需要在这几个table做相应删除  然后取消当前选中的状态
+                                $.get('/api/del?pId='+productGroupId+'&id='+ids.join(','), function (data){
+                                    if(data.code) {
+                                        var index = $(that).parents('tr').index();
+                                        $('.layui-table').each(function(i, v) {
+                                            $(this).find('tr').eq(index).remove();
+                                        });
+                                        $(that).next().removeClass('layui-form-checked')
+                                        layer.msg('删除成功');
+                                    }else {
+                                        layer.msg('删除失败');
+                                    }
+                                })
+
+                            })
+                              
+                            layer.close(index);
+                        })
+                        
                         break;
                 }
             });
