@@ -197,12 +197,16 @@
                     });
                 } else if (layEvent === 'del') { //删除
                     layer.confirm('真的要删除这条数据吗', function(index) {
-                        obj.del(); //删除对应行（tr）的DOM结构
-                        layer.close(index);
-                        console.log(obj);
+                       
                         //向服务端发送删除指令
                         $.get('/api/del?pId='+productGroupId+'&id='+data.id, function (data){
-                            //console.log(data)
+                            if (data.code) {
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.close(index);
+                                layer.msg('删除成功');
+                            }else {
+                                layer.msg('删除失败');
+                            }
                         })
                     });
                 } else if (layEvent === 'edit') { //编辑
