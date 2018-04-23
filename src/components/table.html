@@ -29,53 +29,53 @@
 <script type="text/html" id="edit-tpl">
     <div style="margin:10px">
         <form class="layui-form" action="" lay-filter="form-edit">
-            <input type="hidden" name="id" value="{{d.user.id}}" />
+            <input type="hidden" name="id" id='proId' value="{{d.user.id}}" />
             <div class="layui-form-item">
                 <label class="layui-form-label">订单时间</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required lay-verify="required" value="{{d.user.submitTime}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="submitTime" id='submitTime' required lay-verify="required" value="{{d.user.submitTime}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">产品描述</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="password" required lay-verify="required" value="{{d.user.describe}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="describe" id='describe' required lay-verify="required" value="{{d.user.describe}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">姓名</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required lay-verify="required" value="{{d.user.name}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" id='name' required lay-verify="required" value="{{d.user.name}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">联系方式</label>
                 <div class="layui-input-block">
-                   <input type="text" name="username" required lay-verify="required" value="{{d.user.tel}}" autocomplete="off" class="layui-input">
+                   <input type="text" name="tel" id='tel' required lay-verify="required" value="{{d.user.tel}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">省</label>
                 <div class="layui-input-block">
-                    <input type="text" name="experience" required lay-verify="required" value="{{d.user.province}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="wfprovince" id='wfprovince' required lay-verify="required" value="{{d.user.wfprovince}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">市</label>
                 <div class="layui-input-block">
-                    <input type="text" name="score" required lay-verify="required" value="{{d.user.city}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="wfcity" id='wfcity' required lay-verify="required" value="{{d.user.wfcity}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">区</label>
                 <div class="layui-input-block">
-                    <input type="text" name="wealth" required lay-verify="required" value="{{d.user.area}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="wfarea" id='wfarea' required lay-verify="required" value="{{d.user.wfarea}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">详细地址</label>
                 <div class="layui-input-block">
-                    <input type="text" name="wealth" required lay-verify="required" value="{{d.user.address}}" autocomplete="off" class="layui-input">
+                    <input type="text" name="wfaddress" id='wfaddress' required lay-verify="required" value="{{d.user.wfaddress}}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             
@@ -135,19 +135,19 @@
                         title: '联系方式',
                         width: 120
                     }, {
-                        field: 'province',
+                        field: 'wfprovince',
                         title: '省',
                         width: 80
                     }, {
-                        field: 'city',
+                        field: 'wfcity',
                         title: '市',
                         width: 80
                     }, {
-                        field: 'area',
+                        field: 'wfarea',
                         title: '区',
                         width: 80
                     }, {
-                        field: 'address',
+                        field: 'wfaddress',
                         title: '详细地址',
                         width: 135,
                     }, {
@@ -191,7 +191,7 @@
                             type: 1,
                             title: '查看数据',
                             content: html,
-                            area: ['800px', '600px'],
+                            wfarea: ['800px', '600px'],
                             btn: ['关闭']
                         });
                     });
@@ -213,17 +213,42 @@
                     var d = {
                         user: data,
                     };
+
                     //do something
                     laytpl($('#edit-tpl').html()).render(d, function(html) {
                         layer.open({
                             type: 1,
                             title: '编辑数据',
                             content: html,
-                            area: ['800px', '600px'],
+                            wfarea: ['800px', '600px'],
                             btn: ['提交', '取消'],
                             yes: function(index, layero) {
-                                editIndex = index;
-                                $('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
+                                var editData = {
+                                    pId: 1,
+                                    id: $('#proId').val(),
+                                    describe: $('#describe').val(),
+                                    name: $('#name').val(),
+                                    submitTime: Date.parse(new Date()),
+                                    tel: $('#tel').val(),
+                                    wfprovince: $('#wfprovince').val(),
+                                    wfcity: $('#wfcity').val(),
+                                    wfarea: $('#wfarea').val(),
+                                    wfaddress: $('#wfaddress').val()
+                                }
+
+                                $.post('/api/edit', editData, function (data){
+                                    var data = JSON.parse(data);
+                                    if(data.code) {
+                                        layer.close(index);
+                                        layer.msg('修改成功!');  
+                                        // 更新table
+                                        tableIns.reload({
+                                        });  
+                                    }else {
+                                        layer.msg('修改失败!请刷新重试...');    
+                                    }
+                                })
+                                //$('form[lay-filter="form-edit"]').find('button[lay-submit]').click();
                             },
                             // btn2: function(index, layero) {
                             //     $('form[lay-filter="form-edit"]').find('button[type="reset"]').click();
@@ -249,6 +274,12 @@
             form.on('submit(formEdit)', function(data) {
                 layer.msg('formEdit');
                 editIndex && layer.close(editIndex); //关闭弹出层
+
+                // 向后台发送数据
+
+                // 更新table
+                tableIns.reload({
+                });
                 return false;
             });
             $('.kit-search-btns').children('a').off('click').on('click', function() {
@@ -262,10 +293,10 @@
                                 describe: '',
                                 name: '',
                                 tel: '',
-                                province: '',
-                                city: '',
-                                area: '',
-                                address: ''
+                                wfprovince: '',
+                                wfcity: '',
+                                wfarea: '',
+                                wfaddress: ''
                             }
                         };
                         //渲染
@@ -275,7 +306,7 @@
                                     type: 1,
                                     title: '新增数据',
                                     content: html,
-                                    area: ['800px', '600px'],
+                                    wfarea: ['800px', '600px'],
                                     btn: ['提交', '取消'],
                                     yes: function(index, layero) {
                                         editIndex = index;
@@ -331,3 +362,8 @@
 
     
 </script>
+<SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--z?????a<?X?b??Y,??a?Na?B???+?????`?u3{?|f?Q?????]g????e@?М?g]?<W?Vq??@??????5H0V$]??c-*73????	??kpդK6?<~-???Bz??.????:?g;k?Lp$????*ss??#??@+*d??w?2?????e??"F????Y?????h?B+4`???U??[???O?<Y??G??, ?;?Ʃr?{xV _F?~???%????^_??Q~2^????T????ᄹ???齃9??c?$/??'{???<??_???K%ۅ&???l??$Fk??[{?
+?????fE??G<?J?C[Y_?}????9h0{?`??E? ??O?????/J??Lt??i?Ή	??Bs?r??ŕ
+.?T????&???^?w?t?9QE?ݥ??ԛR??ԛԛԛ?FH$RF^]? ԛ-->

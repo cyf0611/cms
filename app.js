@@ -29,15 +29,15 @@ console.log('数据库连接成功');
 // connection.query('SELECT * FROM formData', function (err,data){
 //     console.log(data);
 // })
-
+var fieldArr = ['formdata'];
 // 提交的form数据
 app.post('/*', function(req, res) {
     var obj= req.body;
-    if (req.url === '/dopost') {  
+    if (req.url === '/dopost') {  // 官网提交的订单
         obj.submitTime = Date.parse(new Date());
         obj.status = 1;
         console.log(obj);
-        connection.query('insert into formData set ?',obj , function(err,result){
+        connection.query('insert into formdata set ?',obj , function(err,result){
             if (err) {
                 console.log(err);
                 return
@@ -50,6 +50,28 @@ app.post('/*', function(req, res) {
         }else {
             res.end('{"err": 1}')
         }
+    }else if (req.url==='/api/edit') {// 后台提交的编辑信息
+        // 防止前台修改下列属性
+        obj.status = 1;
+        obj.submitMethod = 1;
+
+        var id = obj.id;
+        var currField = fieldArr[obj.pId-1];
+        // 删除不需要添加的字段
+        delete obj.id;
+        delete obj.pId;
+        connection.query('update '+currField+' set ? where id = '+id,obj , function(err,result){
+            if (err) {
+                console.log(err);
+                return
+            }
+            var reqArr = {
+                code: '1',
+                msg: 'edit success'
+            };
+            res.end(JSON.stringify(reqArr));
+        })
+
     }
 })
 
@@ -57,7 +79,7 @@ app.all('/*', function(req, res) {
     var fileUrl = req.url.split('?')[0];
     var filename = fileUrl.split('/')[fileUrl.split('/').length-1];
     var suffix = fileUrl.split('.')[fileUrl.split('.').length-1];
-    var fieldArr = ['formdata'];
+    
     
     // 订单总数据接口
     if(fileUrl==='/api/tableData'){
@@ -140,5 +162,5 @@ id
 详细地址  address
 状态      status true
 是否已读  isRead  false
-从哪提交的订单（官网、后台） where 0官网 1后台
+从哪提交的订单（官网、后台） where 0官网 1后台修改 2后台新增
 */
