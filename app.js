@@ -134,10 +134,16 @@ app.all('/*', function(req, res) {
             };
             res.end(JSON.stringify(reqArr));
         })
-    }else {
+    }else if(checkfile(req.url)){
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) console.log(err);
-            res.setHeader("Content-Type",mime.lookup(fileUrl));
+            res.setHeader("Content-Type",mime.getType(fileUrl));
+            res.end(data);
+        })
+    }else {
+        fs.readFile(path.join(__dirname, 'login.html'),(err, data)=>{
+            if (err) console.log(err);
+            res.setHeader("Content-Type",mime.getType('login.html'));
             res.end(data);
         })
     }
@@ -149,6 +155,18 @@ app.all('/*', function(req, res) {
 })
 
 app.listen(9999);//设置监听端口和监听地址
+
+// 检查是否为静态文件 ['.img','.gif','.png','.jpg','.woff','.html','.css','.js','.json']
+function checkfile(str, arr) {
+    var arr = arr || ['.img','.gif','.png','.jpg','.woff','.html','.css','.js','.json'];
+    var res = false;
+    arr.forEach(function (v, i){
+        if (str.indexOf(v) > -1) {
+            res = true;
+        }      
+    })
+    return res;
+}
 
 /* 
 id
