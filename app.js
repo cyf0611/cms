@@ -37,6 +37,7 @@ app.post('/*', function(req, res) {
     var obj= req.body;
     if (req.url === '/dopost') {  // 官网提交的订单
         // 当产品ID不存在 直接返回结果 防止恶意提交
+        console.log(obj.pId,!obj.pId, obj.pId < 1,obj.pId > fieldArr.length)
         if (!obj.pId || obj.pId < 1 || obj.pId > fieldArr.length) {
             res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("请不要恶意提交！")</script></html>')
         }
