@@ -45,6 +45,7 @@ app.post('/*', function(req, res) {
         obj.status = 1;
         obj.submitMethod = 0;
         var currField = fieldArr[obj.pId-1];
+        delete obj.pId;
         connection.query('insert into '+currField+' set ?',obj , function(err,result){
             if (err) {
                 console.log(err);
