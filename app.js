@@ -31,21 +31,27 @@ console.log('数据库连接成功');
 // connection.query('SELECT * FROM formData', function (err,data){
 //     console.log(data);
 // })
-var fieldArr = ['formdata'];
+var fieldArr = ['formdata', 'pro2'];
 // 提交的form数据
 app.post('/*', function(req, res) {
     var obj= req.body;
     if (req.url === '/dopost') {  // 官网提交的订单
-        obj.submitTime = moment().format('YYYY-MM-DD HH-mm-ss');
+        // 当产品ID不存在 直接返回结果 防止恶意提交
+        if (!obj.pId || obj.pId < 1 || obj.pId > fieldArr.length) {
+            res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("请不要恶意提交！")</script></html>')
+        }
+
+        obj.submitTime = moment().format('YYYY-MM-DD HH:mm:ss');
         obj.status = 1;
         obj.submitMethod = 0;
-        connection.query('insert into formdata set ?',obj , function(err,result){
+        var currField = fieldArr[obj.pId-1];
+        connection.query('insert into '+currField+' set ?',obj , function(err,result){
             if (err) {
                 console.log(err);
                 return
             }
         })
-        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href="http://47.104.155.229:7788"</script></html>')
+        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href=location.origin</script></html>')
     }else if (req.url==='/login') {
         if (obj.loginName === 'admin' && obj.passWord === 'zxp-2018.') {
             res.end('{"err": 0}')
