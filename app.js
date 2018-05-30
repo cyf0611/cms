@@ -1,4 +1,4 @@
-﻿var http = require('http');
+var http = require('http');
 var querystring = require('querystring');
 var mysql = require('mysql');
 const fs = require('fs')
@@ -7,6 +7,8 @@ let express = require('express');
 const bodyParser = require('body-parser')
 const mime = require('mime');
 var app = express();
+var moment = require('moment');
+
 app.use(express.static(path.join(__dirname, './static')));
 app.use(express.static(path.join(__dirname, './plugins')));
 // parse application/x-www-form-urlencoded 
@@ -17,10 +19,10 @@ app.use(bodyParser.json())
 
 //连接数据库
 var connection = mysql.createConnection({
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : '123456',
-    database : 'nodetext',
+    host     : 'localhost',
+    user     : 'pro1',
+    password : 'n4nrDPdprwiTAj2Y',
+    database : 'pro1',
     multipleStatements: true
 });
 connection.connect();
@@ -34,18 +36,18 @@ var fieldArr = ['formdata'];
 app.post('/*', function(req, res) {
     var obj= req.body;
     if (req.url === '/dopost') {  // 官网提交的订单
-        obj.submitTime = Date.parse(new Date());
+        obj.submitTime = moment().format('YYYY-MM-DD HH-mm-ss');
         obj.status = 1;
-        console.log(obj);
+        obj.submitMethod = 0;
         connection.query('insert into formdata set ?',obj , function(err,result){
             if (err) {
                 console.log(err);
                 return
             }
         })
-        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href="http://127.0.0.1:5566/4defb209c35fe4dc.html"</script></html>')
+        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href="http://47.104.155.229:7788"</script></html>')
     }else if (req.url==='/login') {
-        if (obj.loginName === 'admin' && obj.passWord === '123456') {
+        if (obj.loginName === 'admin' && obj.passWord === 'zxp-2018.') {
             res.end('{"err": 0}')
         }else {
             res.end('{"err": 1}')
@@ -98,7 +100,6 @@ app.all('/*', function(req, res) {
                         count: results[0][0]['COUNT(*)'],
                         data: results[1]
                     };
-                    
                     res.end(JSON.stringify(reqArr));
                 })
                 break;
@@ -124,7 +125,7 @@ app.all('/*', function(req, res) {
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1];
         var sql = 'UPDATE '+currField+' set status = 0 where id in (' + obj.id + ')';
-        console.log(sql);
+
         connection.query(sql, function(err, result) {
             if (err) throw err;
             res.setHeader("Content-Type",'text/json');
@@ -156,7 +157,7 @@ app.all('/*', function(req, res) {
 
 app.listen(9999);//设置监听端口和监听地址
 
-// 检查是否为静态文件 ['.img','.gif','.png','.jpg','.woff','.html','.css','.js','.json']
+// 检查是否为静态文件
 function checkfile(str, arr) {
     var arr = arr || ['.img','.gif','.png','.jpg','.woff','.html','.css','.js','.json'];
     var res = false;
@@ -167,7 +168,6 @@ function checkfile(str, arr) {
     })
     return res;
 }
-
 /* 
 id
 订单时间 submitTime
