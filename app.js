@@ -54,7 +54,7 @@ app.post('/*', function(req, res) {
                 return
             }
         })
-        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href='+proAddress[pid-1]+'</script></html>')
+        res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href="'+proAddress[pid-1]+'"</script></html>')
     }else if (req.url==='/login') {
         if (obj.loginName === 'admin' && obj.passWord === 'zxp-2018.') {
             res.end('{"err": 0}')
