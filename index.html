@@ -40,24 +40,27 @@
                     <li class="layui-nav-item layui-this">
                         <a class="index_bar" href="javascript:;" kit-target data-options="{url:'src/main.html',icon:'&#xe6c6;',title:'首页',id:'0'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
                     </li>
-                    <li class="layui-nav-item  layui-nav-itemed">
+                    <li class="layui-nav-item">
                         <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 所有产品</span></a>
                         <dl class="layui-nav-child">
-                            <a class="pro1 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
+                            <a class="pro1 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'宁骨济康',id:'1'}">
                                 <dd>
-                                    <i class="layui-icon">&#xe6c6;</i><span> 产品1</span></a> 
+                                    <i class="layui-icon">&#xe6c6;</i><span> 宁骨济康</span></a> 
                                 </dd>   
                             </a>
-<!--
-                            <a class="pro2 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'表格',id:'1'}">
+
+                            <a class="pro2 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/pro2Table.html',icon:'&#xe628;',title:'二十八珍膏',id:'2'}">
                                 <dd>
-                                    <i class="layui-icon">&#xe628;</i><span> 产品2</span></a>
+                                    <i class="layui-icon">&#xe628;</i><span> 二十八珍膏</span></a>
                                 </dd>   
                             </a>
- -->                            
+                           
                         </dl>
                     </li>
-                    
+                     <li class="layui-nav-item">
+                        <a class="" href="javascript:;" kit-target data-options="{url:'src/components/tongji.html',icon:'&#xe62c;',title:'访问统计',id:'3'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 访问统计</span></a>
+                        
+                    </li>
                 </ul>
             </div>
         </div>
@@ -87,15 +90,10 @@
 
             //主入口
             app.set({
-              type: 'spa'
+              type: 'page'
             }).init();
 
             $('.index_bar').click();
-
-
-
-
-
             
         });
 

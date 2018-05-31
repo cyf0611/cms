@@ -18,11 +18,18 @@ app.use(bodyParser.json())
 
 
 //连接数据库
+// var connection = mysql.createConnection({
+//     host     : 'localhost',
+//     user     : 'pro1',
+//     password : 'n4nrDPdprwiTAj2Y',
+//     database : 'pro1',
+//     multipleStatements: true
+// });
 var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'pro1',
-    password : 'n4nrDPdprwiTAj2Y',
-    database : 'pro1',
+    host     : '127.0.0.1',
+    user     : 'root',
+    password : '123456',
+    database : 'nodetext',
     multipleStatements: true
 });
 connection.connect();
@@ -40,6 +47,7 @@ app.post('/*', function(req, res) {
         // 当产品ID不存在 直接返回结果 防止恶意提交
         if (!obj.pId || obj.pId < 1 || obj.pId > fieldArr.length) {
             res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("请不要恶意提交！")</script></html>')
+            return;
         }
 
         obj.submitTime = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -98,21 +106,18 @@ app.all('/*', function(req, res) {
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
         var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';'
-        switch (Number(obj.pId)){
-            case 1:
-                connection.query(sql, function (err, results){
-                    if (err) throw err;
-                    res.setHeader("Content-Type",'text/json');
-                    var reqArr = {
-                        code: '',
-                        msg: '',
-                        count: results[0][0]['COUNT(*)'],
-                        data: results[1]
-                    };
-                    res.end(JSON.stringify(reqArr));
-                })
-                break;
-        }
+        
+        connection.query(sql, function (err, results){
+            if (err) throw err;
+            res.setHeader("Content-Type",'text/json');
+            var reqArr = {
+                code: '',
+                msg: '',
+                count: results[0][0]['COUNT(*)'],
+                data: results[1]
+            };
+            res.end(JSON.stringify(reqArr));
+        })
     }else if(fileUrl==='/api/search') { // 按照条件搜索订单接口
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
