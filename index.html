@@ -41,7 +41,7 @@
                         <a class="index_bar" href="javascript:;" kit-target data-options="{url:'src/main.html',icon:'&#xe6c6;',title:'首页',id:'0'}"><i class="fa fa-plug" aria-hidden="true"></i><span> 首页</span></a>
                     </li>
                     <li class="layui-nav-item">
-                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 所有产品</span></a>
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 产品订单管理</span></a>
                         <dl class="layui-nav-child">
                             <a class="pro1 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/table.html',icon:'&#xe6c6;',title:'宁骨济康',id:'1'}">
                                 <dd>
@@ -50,6 +50,23 @@
                             </a>
 
                             <a class="pro2 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/pro2Table.html',icon:'&#xe628;',title:'二十八珍膏',id:'2'}">
+                                <dd>
+                                    <i class="layui-icon">&#xe628;</i><span> 二十八珍膏</span></a>
+                                </dd>   
+                            </a>
+                           
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span> 后台文章管理</span></a>
+                        <dl class="layui-nav-child">
+                            <a class="pro1 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/pro1Artical.html',icon:'&#xe6c6;',title:'文章管理-宁骨济康',id:'1'}">
+                                <dd>
+                                    <i class="layui-icon">&#xe6c6;</i><span> 宁骨济康</span></a> 
+                                </dd>   
+                            </a>
+
+                            <a class="pro2 my_nav" href="javascript:;" kit-target data-options="{url:'src/components/pro2Artical.html',icon:'&#xe628;',title:'文章管理-二十八珍膏',id:'2'}">
                                 <dd>
                                     <i class="layui-icon">&#xe628;</i><span> 二十八珍膏</span></a>
                                 </dd>   
@@ -80,6 +97,7 @@
 
     <script src="./plugins/layui/layui.js"></script>
     <script>
+        var mainContentHeight = window.innerHeight;
         layui.config({
             base: 'src/js/',
             version: '1.0.3'
