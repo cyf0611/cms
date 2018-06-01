@@ -125,7 +125,8 @@ app.all('/*', function(req, res) {
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
-        var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';';
+        var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 order by id desc limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';';
+        console.log(sql);
         connection.query(sql, function (err, results){
             if (err) throw err;
             res.setHeader("Content-Type",'text/json');
