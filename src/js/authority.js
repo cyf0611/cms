@@ -8,7 +8,7 @@ layui.define(function(exports) {
 			case 2:
 				layer.msg('登录失效，请重新登录！');
 				setTimeout(function() {
-					location.href = 'http://47.104.155.229:9999';
+					location.href = location.origin;
 				}, 2000);
 				break;
 		}

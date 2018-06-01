@@ -12,7 +12,7 @@ const moment = require('moment');
 
 app.use(express.static(path.join(__dirname, './static')));
 app.use(express.static(path.join(__dirname, './plugins')));
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*600 }})) //maxAge为登录有效期
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*600*60 }})) //maxAge为登录有效期
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json 
@@ -167,6 +167,21 @@ app.all('/*', function(req, res) {
             var reqArr = {
                 code: '1',
                 msg: 'del success'
+            };
+            res.end(JSON.stringify(reqArr));
+        })
+    }else if(fileUrl==='/api/isRead') {// 更新isRead
+        var parmas = req.url.split('?')[1];
+        var obj = querystring.parse(parmas);
+        var currField = fieldArr[obj.pId-1];
+        var sql = 'UPDATE '+currField+' set isRead = '+ obj.isRead +' where id = ' + obj.id;
+
+        connection.query(sql, function(err, result) {
+            if (err) throw err;
+            res.setHeader("Content-Type",'text/json');
+            var reqArr = {
+                code: '1',
+                msg: 'update success'
             };
             res.end(JSON.stringify(reqArr));
         })

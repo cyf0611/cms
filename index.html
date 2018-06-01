@@ -103,9 +103,7 @@
             var loginUserName = localStorage.getItem('zdsm');
             $('#loginUserName').text(loginUserName);
             $('.exit').on('click', function() {
-                $.get('/exit', function() {
-                    alert('退出')
-                })
+                $.get('/exit')
             })
         })
         

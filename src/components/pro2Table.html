@@ -89,6 +89,11 @@
     </div>
 </script>
 
+<script type="text/html" id="switchTpl">
+  <!-- 这里的 checked 的状态只是演示 -->
+  <input type="checkbox" name="isRead" value="{{d.id}}" lay-skin="switch" lay-text="已读|未读" lay-filter="isRead" {{ d.isRead ? "checked" : "" }}>
+</script>
+
 <script>
     var limitcount = 20;  
     var curnum = 1;
@@ -113,6 +118,12 @@
                     [{
                         checkbox: true,
                         fixed: true
+                    },{
+                        field: 'isRead',
+                        title: '是否已读',
+                        width: 90,
+                        align: 'center',
+                        templet: '#switchTpl'
                     }, {
                         field: 'submitTime',
                         title: '订单时间',
@@ -270,6 +281,12 @@
                     // });
                 }
             });
+    
+            // 监听已读未读
+            form.on('switch(isRead)', function(obj){
+                $.get('/api/isRead',{pId: product2GroupId,id: this.value, isRead: Number(obj.elem.checked)});
+            });
+
             form.render(null, 'kit-search-form');
             // $('#kit-search-more').on('click', function() {
             //     $('.kit-search-mored').toggle();
