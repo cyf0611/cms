@@ -6,6 +6,10 @@
  * LICENSE:MIT
  */
 var tab;
+layui.extend({
+  authority: '{/}./src/js/authority' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+});
+
 layui.define(['element', 'nprogress', 'form', 'table', 'loader', 'tab', 'navbar', 'onelevel', 'laytpl', 'spa'], function(exports) {
     var $ = layui.jquery,
         element = layui.element,

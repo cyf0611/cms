@@ -1,16 +1,18 @@
-var http = require('http');
-var querystring = require('querystring');
-var mysql = require('mysql');
+const http = require('http');
+const querystring = require('querystring');
+const mysql = require('mysql');
 const fs = require('fs')
 const path = require('path')
-let express = require('express');
+const express = require('express');
 const bodyParser = require('body-parser')
 const mime = require('mime');
-var app = express();
-var moment = require('moment');
+const session = require('express-session')
+const app = express();
+const moment = require('moment');
 
 app.use(express.static(path.join(__dirname, './static')));
 app.use(express.static(path.join(__dirname, './plugins')));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*600 }})) //maxAge为登录有效期
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json 
@@ -40,6 +42,13 @@ console.log('数据库连接成功');
 // })
 var proAddress = ['http://www.yuyaninggujikang.com', 'http://www.zhendasm.com']
 var fieldArr = ['formdata', 'pro2'];
+var reqErrArr = {
+        status: 0,// 1 无权限 2 未登录
+        code: 0, 
+        msg: 1,
+        count: 0,
+        data: []
+    }
 // 提交的form数据
 app.post('/*', function(req, res) {
     var obj= req.body;
@@ -69,6 +78,7 @@ app.post('/*', function(req, res) {
         connection.query(sql, function(err, result) {
             if (err) res.end(err);
             if (result && result.length) {
+                req.session.username = obj.loginName;
                 res.end('{"err": 0}')
             }else {
                 res.end('{"err": 1}')
@@ -107,11 +117,14 @@ app.all('/*', function(req, res) {
     
     // 订单总数据接口
     if(fileUrl==='/api/tableData'){
+        if (checkAuthority(req.session, res)) {
+            return false
+        }
+        
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
-        var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';'
-        
+        var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';';
         connection.query(sql, function (err, results){
             if (err) throw err;
             res.setHeader("Content-Type",'text/json');
@@ -124,6 +137,9 @@ app.all('/*', function(req, res) {
             res.end(JSON.stringify(reqArr));
         })
     }else if(fileUrl==='/api/search') { // 按照条件搜索订单接口
+        if (checkAuthority(req.session, res)) {
+            return false
+        }
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
@@ -154,6 +170,8 @@ app.all('/*', function(req, res) {
             };
             res.end(JSON.stringify(reqArr));
         })
+    }else if(fileUrl==='/exit'){ //退出登录
+        req.session.destroy();
     }else if(checkfile(req.url)){
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) throw err;
@@ -186,6 +204,21 @@ function checkfile(str, arr) {
         }      
     })
     return res;
+}
+// 权限验证
+function checkAuthority(session, res) {
+    if (!session.username) {
+        // 值为undefined  此时登录失效或者未登录
+        reqErrArr.status = 2;
+        res.end(JSON.stringify(reqErrArr));
+        return true;
+    }else if(session.username!=='admin'){
+        reqErrArr.status = 1;
+        res.end(JSON.stringify(reqErrArr));
+        return true;
+    }else {
+        return false;
+    }
 }
 /* 
 id

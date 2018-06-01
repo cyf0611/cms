@@ -93,15 +93,14 @@
     var limitcount = 20;  
     var curnum = 1;
     var productGroupId = 1;
-     layui.use(['table','laypage'], function() {
+     layui.use(['table','laypage','authority'], function() {
             var table = layui.table,
                 $ = layui.jquery,
                 layer = layui.layer,
                 form = layui.form,
                 laytpl = layui.laytpl,
-                laypage = layui.laypage; 
-                       
-
+                laypage = layui.laypage, 
+                authority = layui.authority;        
             var tableIns = table.render({
                 elem: '#demo',
                 height: 'full-135', //容器高度
@@ -162,7 +161,7 @@
                     }]
                 ],
                 done: function(res, curr, count) {
-                    
+                    authority(res.status); //对返回结果进行验证
                 },
                 loading: true,
                 //method: 'post'
