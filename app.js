@@ -64,11 +64,16 @@ app.post('/*', function(req, res) {
         })
         res.end('<!doctype html><html><head><meta charset="utf-8"></head><script>alert("提交成功! 我们会尽快安排发货~");location.href="'+proAddress[pid-1]+'"</script></html>')
     }else if (req.url==='/login') {
-        if (obj.loginName === 'admin' && obj.passWord === 'zxp-2018.') {
-            res.end('{"err": 0}')
-        }else {
-            res.end('{"err": 1}')
-        }
+        // 进行账号秘密验证
+        var sql = 'select * from login where userName = "' + obj.loginName + '" and passWord = "' + obj.passWord + '"';
+        connection.query(sql, function(err, result) {
+            if (err) res.end(err);
+            if (result && result.length) {
+                res.end('{"err": 0}')
+            }else {
+                res.end('{"err": 1}')
+            }
+        })
     }else if (req.url==='/api/edit') {// 后台提交的编辑信息
         // 防止前台修改下列属性
         obj.status = 1;
@@ -151,13 +156,13 @@ app.all('/*', function(req, res) {
         })
     }else if(checkfile(req.url)){
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
-            if (err) console.log(err);
+            if (err) throw err;
             res.setHeader("Content-Type",mime.getType(fileUrl));
             res.end(data);
         })
     }else {
         fs.readFile(path.join(__dirname, 'login.html'),(err, data)=>{
-            if (err) console.log(err);
+            if (err) throw err;
             res.setHeader("Content-Type",mime.getType('login.html'));
             res.end(data);
         })
