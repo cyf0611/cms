@@ -62,6 +62,7 @@ app.post('/*', function(req, res) {
         obj.submitTime = moment().format('YYYY-MM-DD HH:mm:ss');
         obj.status = 1;
         obj.submitMethod = 0;
+        obj.isRead = 0;
         var currField = fieldArr[obj.pId-1];
         var pid = obj.pId;
         delete obj.pId;
@@ -185,6 +186,19 @@ app.all('/*', function(req, res) {
             };
             res.end(JSON.stringify(reqArr));
         })
+    }else if(fileUrl==='/api/getAllRead') {// 获取所有未读订单
+        var reqArr = [], sql  = '';
+        for(var i=0;i<fieldArr.length;i++) { //循环遍历查询每个产品表
+            sql += 'select COUNT(*) from '+ fieldArr[i] +' where isRead = 0 and status = 1;';
+        }
+        connection.query(sql, function(err, results) {
+            if (err) throw err; 
+            for(var i=0;i<results.length;i++) {
+                reqArr.push(results[i][0]['COUNT(*)']);  
+            }
+            res.end(JSON.stringify(reqArr));
+        })
+        
     }else if(fileUrl==='/exit'){ //退出登录
         req.session.destroy();
     }else if(checkfile(req.url)){

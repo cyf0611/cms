@@ -5,8 +5,8 @@
                      <div class="info-box">
                         <span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">产品1新增订单</span>
-                            <span class="info-box-number">2</span>
+                            <span class="info-box-text">宁骨济康未读订单</span>
+                            <span class="info-box-number">0</span>
                         </div>
                     </div>
                 </a>
@@ -17,8 +17,8 @@
                      <div class="info-box">
                         <span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">产品2新增订单</span>
-                            <span class="info-box-number">13</span>
+                            <span class="info-box-text">二十八珍膏未读订单</span>
+                            <span class="info-box-number">0</span>
                         </div>
                     </div>
                 </a>
@@ -35,6 +35,12 @@
         $('dd .my_nav').eq($(this).index()).click();
     })
 
+    $.get('/api/getAllRead', function(res) {
+        var data = JSON.parse(res);
+        $('.info-box-number').each(function(index, el) {
+            $(this).text(data[index]);
+        });
+    })
     
 
 </script>
