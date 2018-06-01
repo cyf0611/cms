@@ -18,20 +18,20 @@ app.use(bodyParser.json())
 
 
 //连接数据库
-// var connection = mysql.createConnection({
-//     host     : 'localhost',
-//     user     : 'pro1',
-//     password : 'n4nrDPdprwiTAj2Y',
-//     database : 'pro1',
-//     multipleStatements: true
-// });
 var connection = mysql.createConnection({
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : '123456',
-    database : 'nodetext',
+    host     : 'localhost',
+    user     : 'pro1',
+    password : 'n4nrDPdprwiTAj2Y',
+    database : 'pro1',
     multipleStatements: true
 });
+// var connection = mysql.createConnection({
+//     host     : '127.0.0.1',
+//     user     : 'root',
+//     password : '123456',
+//     database : 'nodetext',
+//     multipleStatements: true
+// });
 connection.connect();
 
 console.log('数据库连接成功');
