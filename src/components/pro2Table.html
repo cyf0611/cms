@@ -284,7 +284,14 @@
     
             // 监听已读未读
             form.on('switch(isRead)', function(obj){
-                $.get('/api/isRead',{pId: product2GroupId,id: this.value,isRead: Number(obj.elem.checked)});
+                $.get('/api/isRead',{pId: product2GroupId,id: this.value,isRead: Number(obj.elem.checked)}, function(res) {
+                        if (res.code) {
+                            layer.tips('更新成功', obj.othis);
+                        }else {
+                            layer.tips('更新失败！！！请刷新重试', obj.othis);
+                        }
+                        
+                });
             });
 
             form.render(null, 'kit-search-form');
