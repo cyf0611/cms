@@ -126,7 +126,6 @@ app.all('/*', function(req, res) {
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
         var sql = 'SELECT COUNT(*) FROM '+currField+' where status = 1;SELECT * FROM '+currField+' where status = 1 order by id desc limit ' + (obj.page-1)*obj.limit + ','+obj.limit+';';
-        console.log(sql);
         connection.query(sql, function (err, results){
             if (err) throw err;
             res.setHeader("Content-Type",'text/json');
@@ -202,7 +201,27 @@ app.all('/*', function(req, res) {
         
     }else if(fileUrl==='/exit'){ //退出登录
         req.session.destroy();
-    }else if(checkfile(req.url)){
+    }else if(fileUrl==='/api/toIndex') {// 统计访问量
+	    var parmas = req.url.split('?')[1];
+	    var obj = querystring.parse(parmas);
+	    var currDate = moment().format('YYYY-MM-DD');
+	    var sql = 'insert into clickCount set date="'+currDate+'", pro='+obj.pId+' on duplicate key update toIndex=toIndex+1';
+
+	    connection.query(sql, function(err, result) {
+		    if (err) throw err;
+		    res.end('ok');
+	    })
+    }else if(fileUrl==='/api/toTaobao') {// 统计跳转到淘宝次数
+		var parmas = req.url.split('?')[1];
+		var obj = querystring.parse(parmas);
+		var currDate = moment().format('YYYY-MM-DD');
+		var sql = 'insert into clickCount set date="'+currDate+'", pro='+obj.pId+' on duplicate key update toTaobao=toTaobao+1';
+
+		connection.query(sql, function(err, result) {
+			if (err) throw err;
+			res.end('ok');
+		})
+	}else if(checkfile(req.url)){
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) throw err;
             res.setHeader("Content-Type",mime.getType(fileUrl));
