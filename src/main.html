@@ -1,36 +1,94 @@
 <div class="layui-fluid main">
         <div class="layui-row layui-col-space15 layui-tab-content">
-            <div class="layui-col-md4">
-                <a href="javascript:;" kit-target data-options="{url:'./components/table.html',icon:'&#xe6c6;',title:'测试',id:'12'}">
-                     <div class="info-box">
-                        <span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">宁骨济康未读订单</span>
-                            <span class="info-box-number">0</span>
-                        </div>
+            <div class="layui-col-md6 layui-col-sm12">
+                <div class="info-box">
+                    <a href="javascript:;">
+                        <span class="info-box-icon layui-bg-blue"><img src='../static/images/translate.png' height=60 width=60 class=" layui-anim" aria-hidden="true"></img></span>
+                    </a>
+                    <div class="info-box-content">
+                        <table class="layui-table layui-hide" >
+                            <thead>
+                            <tr>
+                                <th>总访问</th>
+                                <th>总跳入淘宝量</th>
+                                <th>今日总访问</th>
+                                <th>今日跳入淘宝量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>285</td>
+                                <td>444</td>
+                                <td>285</td>
+                                <td>444</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="javascript:;" >
+                            <div class='info1'>
+                                <span class="info-box-text">宁骨济康未读订单</span>
+                                <span class="info-box-number">0</span>
+                            </div>
+                        </a>
                     </div>
-                </a>
-               
+                </div>
             </div>
-            <div class="layui-col-md4">
-                <a href="javascript:;">
-                     <div class="info-box">
-                        <span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">二十八珍膏未读订单</span>
-                            <span class="info-box-number">0</span>
-                        </div>
+
+            <div class="layui-col-md6 layui-col-sm12">
+                <div class="info-box">
+                    <a href="javascript:;">
+                        <span class="info-box-icon layui-bg-green"><img src='../static/images/translate.png' height=60 width=60 class=" layui-anim" aria-hidden="true"></img></span>
+                    </a>
+                    <div class="info-box-content">
+                        <table class="layui-table layui-hide" >
+                            <thead>
+                            <tr>
+                                <th>总访问</th>
+                                <th>总跳入淘宝量</th>
+                                <th>今日总访问</th>
+                                <th>今日跳入淘宝量</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>285</td>
+                                <td>444</td>
+                                <td>285</td>
+                                <td>444</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="javascript:;" >
+                            <div class='info1'>
+                                <span class="info-box-text">二十八珍膏未读订单</span>
+                                <span class="info-box-number">0</span>
+                            </div>
+                        </a>
                     </div>
-                </a>
+                </div>
             </div>
-            
+
         </div>
         
     </div>
-
+<style scoped>
+    .info-box .info-box-content {
+        padding: 5px 0;
+    }
+    .info-box-content>table {
+        margin: -5px 0 0 0;
+        height: 85px;
+    }
+    tbody tr {
+        color: #1E9FFF;
+    }
+    .rotate {
+        transform: rotate(90deg)!important;
+    }
+</style>
 <script>
     var $ = layui.jquery;
-    $('.main').on('click','.layui-col-md4', function() {
+    $('.main').on('click','.info1', function() {
         $('.layui-nav-item').removeClass('layui-this');
         $('dd .my_nav').eq($(this).index()).click();
     })
@@ -38,9 +96,42 @@
     $.get('/api/getAllRead', function(res) {
         var data = JSON.parse(res);
         $('.info-box-number').each(function(index, el) {
-            $(this).text(data[index]);
+        	$(this).text(data[index]);
         });
     })
-    
 
+    $.get('/api/getCount', function(res) {
+	    var data = JSON.parse(res);
+	    
+	    $('tbody').each(function(index) {
+		    $(this).find('td').each(function(i) {
+			    console.log(i);
+			    switch (i){
+				    case 0:
+					    $(this).text(data[0][index].indexCounts);
+					    break;
+				    case 1:
+					    $(this).text(data[0][index].taobaoCounts)
+					    break;
+				    case 2:
+					    $(this).text(data[1][index].toIndex)
+					    break;
+				    case 3:
+					    $(this).text(data[1][index].toTaobao)
+					    break;
+			    }
+
+		    })
+	    })
+    })
+
+    $('.info-box-icon').hover(function() {
+	    $(this).find('.layui-anim').addClass("layui-anim-scale");
+    },function() {
+    	$(this).find('.layui-anim').removeClass("layui-anim-scale");
+    });
+
+    $('.info-box-icon').on('click', function() {
+    	 $(this).parent().siblings().children().toggleClass('layui-hide')
+    })
 </script>

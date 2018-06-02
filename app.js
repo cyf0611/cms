@@ -221,7 +221,15 @@ app.all('/*', function(req, res) {
 			if (err) throw err;
 			res.end('ok');
 		})
-	}else if(checkfile(req.url)){
+	}else if(fileUrl==='/api/getCount') {// 后台首页各种统计数据接口
+
+	    var currDate = moment().format('YYYY-MM-DD');
+	    var sql = 'SELECT SUM(toIndex) as indexCounts,SUM(toTaobao) as taobaoCounts FROM clickCount GROUP BY pro;SELECT * from clickCount where date = "'+currDate+'"';
+	    connection.query(sql, function(err, results) {
+		    if (err) throw err;
+		    res.end(JSON.stringify(results));
+	    })
+    }else if(checkfile(req.url)){
         fs.readFile(path.join(__dirname, fileUrl),(err, data)=>{
             if (err) throw err;
             res.setHeader("Content-Type",mime.getType(fileUrl));
