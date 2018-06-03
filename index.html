@@ -96,6 +96,7 @@
     </div>
 
     <script src="./plugins/layui/layui.js"></script>
+    <script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script>
         var mainContentHeight = window.innerHeight;
         layui.use('jquery', function() {
@@ -106,7 +107,7 @@
                 $.get('/exit')
             })
         })
-        
+
         layui.config({
             base: 'src/js/',
             version: '1.0.3'
@@ -127,6 +128,7 @@
 
 
     </script>
+
 </body>
 
 </html>

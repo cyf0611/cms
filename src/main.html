@@ -1,72 +1,7 @@
 <div class="layui-fluid main">
         <div class="layui-row layui-col-space15 layui-tab-content">
-            <div class="layui-col-md6 layui-col-sm12">
-                <div class="info-box">
-                    <a href="javascript:;">
-                        <span class="info-box-icon layui-bg-blue"><img src='../static/images/translate.png' height=60 width=60 class=" layui-anim" aria-hidden="true"></img></span>
-                    </a>
-                    <div class="info-box-content">
-                        <table class="layui-table layui-hide" >
-                            <thead>
-                            <tr>
-                                <th>总访问</th>
-                                <th>总跳入淘宝量</th>
-                                <th>今日访问</th>
-                                <th>今日跳入淘宝量</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a href="javascript:;" >
-                            <div class='info1'>
-                                <span class="info-box-text">宁骨济康未读订单</span>
-                                <span class="info-box-number">0</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            
 
-            <div class="layui-col-md6 layui-col-sm12">
-                <div class="info-box">
-                    <a href="javascript:;">
-                        <span class="info-box-icon layui-bg-green"><img src='../static/images/translate.png' height=60 width=60 class=" layui-anim" aria-hidden="true"></img></span>
-                    </a>
-                    <div class="info-box-content">
-                        <table class="layui-table layui-hide" >
-                            <thead>
-                            <tr>
-                                <th>总访问</th>
-                                <th>总跳入淘宝量</th>
-                                <th>今日访问</th>
-                                <th>今日跳入淘宝量</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>285</td>
-                                <td>444</td>
-                                <td>285</td>
-                                <td>444</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a href="javascript:;" >
-                            <div class='info1'>
-                                <span class="info-box-text">二十八珍膏未读订单</span>
-                                <span class="info-box-number">0</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
         </div>
         
@@ -91,50 +26,70 @@
 </style>
 <script>
     var $ = layui.jquery;
-    $('.info1').on('click', function() {
-        $('.layui-nav-item').removeClass('layui-this');
-        $('dd .my_nav').eq($('.info1').index(this)).click();
-    })
 
-    $.get('/api/getAllRead', function(res) {
-        var data = JSON.parse(res);
-        $('.info-box-number').each(function(index, el) {
-        	$(this).text(data[index]);
-        });
-    })
 
-    $.get('/api/getCount', function(res) {
-	    var data = JSON.parse(res);
-	    
-	    $('tbody').each(function(index) {
-		    $(this).find('td').each(function(i) {
-			    console.log(i);
-			    switch (i){
-				    case 0:
-					    $(this).text(data[0][index].indexCounts);
-					    break;
-				    case 1:
-					    $(this).text(data[0][index].taobaoCounts)
-					    break;
-				    case 2:
-					    $(this).text(data[1][index].toIndex)
-					    break;
-				    case 3:
-					    $(this).text(data[1][index].toTaobao)
-					    break;
-			    }
+    $.get('/api/getCount', returnCitySN, function(res) {
+	    var data = JSON.parse(res)
+            ,arr=[]
+            ,code = ''
+            ,proNameArr = ['宁骨济康','二十八珍膏'];
 
-		    })
+	    $(data[0]).each(function(i) {
+	    	var obj = $.extend(this,data[1][i],data[2][i]);
+		    arr.push(obj);
+        })
+        $(arr).each(function(i) {
+        	code += '<div class="layui-col-md6 layui-col-sm12">'
+		        +'<div class="info-box">'
+		        +'<a href="javascript:;">'
+		        +'<span class="info-box-icon layui-bg-green"><img src="../static/images/translate.png" height=60 width=60 class="layui-anim" aria-hidden="true"></img></span>'
+                +'</a>'
+                +'<div class="info-box-content">'
+                +'<table class="layui-table layui-hide" >'
+                +'<thead>'
+                +'<tr>'
+                +'<th>总访问</th>'
+                +'<th>总跳入淘宝量</th>'
+                +'<th>今日访问</th>'
+                +'<th>今日跳入淘宝量</th>'
+                +'</tr>'
+                +'</thead>'
+                +'<tbody>'
+                +'<tr>'
+                +'<td>'+this.indexCounts+'</td>'
+                +'<td>'+this.taobaoCounts+'</td>'
+                +'<td>'+this.toIndex+'</td>'
+                +'<td>'+this.toTaobao+'</td>'
+                +'</tr>'
+                +'</tbody>'
+                +'</table>'
+                +'<a href="javascript:;" >'
+                +'<div class="info1">'
+                +'<span class="info-box-text">'+proNameArr[i]+'未读订单</span>'
+                +'<span class="info-box-number">'+this["COUNT(*)"]+'</span>'
+                +'</div>'
+                +'</a>'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+        })
+
+        $('[lay-item-id="0"] .layui-tab-content').html(code);
+
+	    $('.info-box-icon').hover(function() {
+		    $(this).find('.layui-anim').addClass("layui-anim-scale");
+	    },function() {
+		    $(this).find('.layui-anim').removeClass("layui-anim-scale");
+	    });
+
+	    $('.info-box-icon').on('click', function() {
+		    $(this).parent().siblings().children().toggleClass('layui-hide')
+	    })
+	    $('.info1').on('click', function() {
+		    $('.layui-nav-item').removeClass('layui-this');
+		    $('dd .my_nav').eq($('.info1').index(this)).click();
 	    })
     })
 
-    $('.info-box-icon').hover(function() {
-	    $(this).find('.layui-anim').addClass("layui-anim-scale");
-    },function() {
-    	$(this).find('.layui-anim').removeClass("layui-anim-scale");
-    });
 
-    $('.info-box-icon').on('click', function() {
-    	 $(this).parent().siblings().children().toggleClass('layui-hide')
-    })
 </script>

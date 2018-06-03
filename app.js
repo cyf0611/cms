@@ -222,10 +222,23 @@ app.all('/*', function(req, res) {
 			res.end('ok');
 		})
 	}else if(fileUrl==='/api/getCount') {// 后台首页各种统计数据接口
+	    var parmas = req.url.split('?')[1];
+	    var obj = querystring.parse(parmas);
+	    obj.time = moment().format('YYYY-MM-DD HH:mm:ss');
+	    obj.user = req.session.username;
+	    obj.source = 1;
+	    connection.query('insert into ip set ? ', obj, function(err) {
+		    if (err) throw err;
+	    })
+	    var sql  = 'select COUNT(*) from formdata where isRead = 0 and status = 1'
+		    ,currDate = moment().format('YYYY-MM-DD')
+		    ,sqlAll;
+	    for(var i=1;i<fieldArr.length;i++) { //循环遍历查询每个产品表
+		    sql += ' union all select COUNT(*) from '+ fieldArr[i] +' where isRead = 0 and status = 1';
+	    }
 
-	    var currDate = moment().format('YYYY-MM-DD');
-	    var sql = 'SELECT SUM(toIndex) as indexCounts,SUM(toTaobao) as taobaoCounts FROM clickCount GROUP BY pro;SELECT * from clickCount where date = "'+currDate+'"';
-	    connection.query(sql, function(err, results) {
+	    sqlAll = 'SELECT SUM(toIndex) as indexCounts,SUM(toTaobao) as taobaoCounts FROM clickCount GROUP BY pro;SELECT * from clickCount where date = "'+currDate+'";'+sql;
+	    connection.query(sqlAll, function(err, results) {
 		    if (err) throw err;
 		    res.end(JSON.stringify(results));
 	    })
