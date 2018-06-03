@@ -11,16 +11,16 @@
                             <tr>
                                 <th>总访问</th>
                                 <th>总跳入淘宝量</th>
-                                <th>今日总访问</th>
+                                <th>今日访问</th>
                                 <th>今日跳入淘宝量</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>285</td>
-                                <td>444</td>
-                                <td>285</td>
-                                <td>444</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
                             </tr>
                             </tbody>
                         </table>
@@ -45,7 +45,7 @@
                             <tr>
                                 <th>总访问</th>
                                 <th>总跳入淘宝量</th>
-                                <th>今日总访问</th>
+                                <th>今日访问</th>
                                 <th>今日跳入淘宝量</th>
                             </tr>
                             </thead>
@@ -82,15 +82,18 @@
     tbody tr {
         color: #1E9FFF;
     }
+    th {
+        text-align: center!important;
+    }
     .rotate {
         transform: rotate(90deg)!important;
     }
 </style>
 <script>
     var $ = layui.jquery;
-    $('.main').on('click','.info1', function() {
+    $('.info1').on('click', function() {
         $('.layui-nav-item').removeClass('layui-this');
-        $('dd .my_nav').eq($(this).index()).click();
+        $('dd .my_nav').eq($('.info1').index(this)).click();
     })
 
     $.get('/api/getAllRead', function(res) {
