@@ -204,10 +204,11 @@ app.all('/*', function(req, res) {
     }else if(fileUrl==='/api/toIndex') {// 统计访问量
 	    var parmas = req.url.split('?')[1];
 	    var obj = querystring.parse(parmas);
-	    var currDate = moment().format('YYYY-MM-DD');
-	    var sql = 'insert into clickCount set date="'+currDate+'", pro='+obj.pId+' on duplicate key update toIndex=toIndex+1';
+	    var currDate = moment().format('YYYY-MM-DD HH:mm:ss');
+	    obj.time = currDate;
+	    var sql = 'insert into clickCount set date="'+currDate.slice(0, 10)+'", pro='+obj.source+' on duplicate key update toIndex=toIndex+1;insert into ip set ? ';
 
-	    connection.query(sql, function(err, result) {
+	    connection.query(sql, obj, function(err) {
 		    if (err) throw err;
 		    res.end('ok');
 	    })
@@ -226,7 +227,7 @@ app.all('/*', function(req, res) {
 	    var obj = querystring.parse(parmas);
 	    obj.time = moment().format('YYYY-MM-DD HH:mm:ss');
 	    obj.user = req.session.username;
-	    obj.source = 1;
+	    obj.source = 0;
 	    connection.query('insert into ip set ? ', obj, function(err) {
 		    if (err) throw err;
 	    })
