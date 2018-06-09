@@ -121,7 +121,6 @@ app.all('/*', function(req, res) {
         if (checkAuthority(req.session, res)) {
             return false
         }
-        
         var parmas = req.url.split('?')[1];
         var obj = querystring.parse(parmas);
         var currField = fieldArr[obj.pId-1]; // 不同产品数据表的数组 
