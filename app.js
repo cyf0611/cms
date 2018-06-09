@@ -33,15 +33,17 @@ var connection = mysql.createConnection({
 //     password : '123456',
 //     database : 'nodetext',
 //     multipleStatements: true
-// });
+//});
 connection.connect();
 
 console.log('数据库连接成功');
 // connection.query('SELECT * FROM formData', function (err,data){
 //     console.log(data);
 // })
-var proAddress = ['http://www.yuyaninggujikang.com', 'http://www.zhendasm.com']
-var fieldArr = ['formdata', 'pro2'];
+
+
+var proAddress = ['http://www.yuyaninggujikang.com', 'http://www.zhendasm.com', 'http://www.yuyafulishu.com', 'http://www.yuyajianruishiyou.com']
+var fieldArr = ['formdata', 'pro2', 'pro3', 'pro4'];
 var reqErrArr = {
         status: 0,// 1 无权限 2 未登录
         code: 0, 
@@ -52,7 +54,6 @@ var reqErrArr = {
 // 提交的form数据
 app.post('/*', function(req, res) {
     var obj= req.body;
-    
     if (req.url === '/dopost') {  // 官网提交的订单
         // 当产品ID不存在 直接返回结果 防止恶意提交
         if (!obj.pId || obj.pId < 1 || obj.pId > fieldArr.length) {
