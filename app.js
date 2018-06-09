@@ -12,7 +12,7 @@ const moment = require('moment');
 
 app.use(express.static(path.join(__dirname, './static')));
 app.use(express.static(path.join(__dirname, './plugins')));
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*600*60 }})) //maxAge为登录有效期
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*60*60*240}})) //maxAge为登录有效期
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json 
