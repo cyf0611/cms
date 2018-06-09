@@ -52,6 +52,7 @@ var reqErrArr = {
 // 提交的form数据
 app.post('/*', function(req, res) {
     var obj= req.body;
+    
     if (req.url === '/dopost') {  // 官网提交的订单
         // 当产品ID不存在 直接返回结果 防止恶意提交
         if (!obj.pId || obj.pId < 1 || obj.pId > fieldArr.length) {
