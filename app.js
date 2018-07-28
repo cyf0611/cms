@@ -52,8 +52,8 @@ console.log('数据库连接成功');
 
 
 
-var proAddress = ['http://www.yuyaninggujikang.com', 'http://www.zhendasm.com', 'http://www.yuyafulishu.com', 'http://www.yuyajianruishiyou.com', 'http://www.zhangdefusankeyou.com']
-var fieldArr = ['formdata', 'pro2', 'pro3', 'pro4', 'pro5'];
+var proAddress = ['http://www.yuyaninggujikang.com', 'http://www.zhendasm.com', 'http://www.yuyafulishu.com', 'http://www.yuyajianruishiyou.com', 'http://www.zhangdefusankeyou.com', 'http://www.zdfrt.com']
+var fieldArr = ['formdata', 'pro2', 'pro3', 'pro4', 'pro5', 'pro6'];
 var reqErrArr = {
         status: 0,// 1 无权限 2 未登录
         code: 0, 
