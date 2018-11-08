@@ -1,0 +1,396 @@
+<div class="kit-table">
+    <form class="layui-form" lay-filter="kit-search-form">
+        <div class="kit-table-header">
+            <div class="kit-search-btns" id='pro7Btns'>
+                <a href="javascript:;" data-action="add" class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe608;</i> 新增</a>
+                <a href="javascript:;" data-action="del-bulk" class="layui-btn layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i> 批量删除</a>
+            </div>
+            <div class="kit-search-inputs">
+                <div class="kit-search-keyword">
+                    <input type="text" id="searchKeyword" class="layui-input" required lay-verify="required" name="keyword" placeholder="搜索关键字..(暂支持电话)"/>
+                    <button lay-submit lay-filter="pro7search"><i class="layui-icon">&#xe615;</i></button>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+    <div class="kit-table-body">
+        <table id="pro7" lay-filter="pro7"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+
+
+<script type="text/html" id="pro7edit-tpl">
+    <div style="margin:10px">
+        <form class="layui-form" action="" lay-filter="pro7form-edit">
+            <input type="hidden" name="id" id='proId' value="{{d.user.id}}" />
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="submitTime" id='submitTime' required lay-verify="required" value="{{d.user.submitTime}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品描述</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="describe" id='describe' required lay-verify="required" value="{{d.user.describe}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id='name' required lay-verify="required" value="{{d.user.name}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-block">
+                    <input type="text" name="tel" id='tel' required lay-verify="required" value="{{d.user.tel}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">省</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wfprovince" id='wfprovince' required lay-verify="required" value="{{d.user.wfprovince}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">市</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wfcity" id='wfcity' required lay-verify="required" value="{{d.user.wfcity}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">区</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wfarea" id='wfarea' required lay-verify="required" value="{{d.user.wfarea}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">详细地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wfaddress" id='wfaddress' required lay-verify="required" value="{{d.user.wfaddress}}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="display:none;">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="pro7formEdit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="isRead" value="{{d.id}}" lay-skin="switch" lay-text="已读|未读" lay-filter="isRead" {{ d.isRead ? "checked" : "" }}>
+</script>
+
+<script>
+    var limitcount = 20;
+    var curnum = 1;
+    var product7GroupId = 7;
+    layui.use(['table','laypage', 'authority'], function() {
+        var table = layui.table,
+            $ = layui.jquery,
+            layer = layui.layer,
+            form = layui.form,
+            laytpl = layui.laytpl,
+            laypage = layui.laypage,
+            authority = layui.authority;
+
+
+        var tableIns = table.render({
+            elem: '#pro7',
+            height: 'full-135', //容器高度
+            url: '/api/tableData?pId='+product7GroupId,
+            page: true,
+            id: 'pro7',
+            cols: [
+                [{
+                    checkbox: true,
+                    fixed: true
+                },{
+                    field: 'isRead',
+                    title: '是否已读',
+                    width: 90,
+                    align: 'center',
+                    templet: '#switchTpl'
+                }, {
+                    field: 'submitTime',
+                    title: '订单时间',
+                    align: 'center',
+                    width: 170,
+                    sort: true,
+                }, {
+                    field: 'describe',
+                    title: '产品描述',
+                    align: 'center',
+                    width: 190
+                }, {
+                    field: 'name',
+                    title: '姓名',
+                    align: 'center',
+                    width: 80
+                }, {
+                    field: 'tel',
+                    title: '联系方式',
+                    align: 'center',
+                    width: 120
+                }, {
+                    field: 'wfprovince',
+                    title: '省',
+                    align: 'center',
+                    width: 80
+                }, {
+                    field: 'wfcity',
+                    title: '市',
+                    align: 'center',
+                    width: 80
+                }, {
+                    field: 'wfarea',
+                    title: '区',
+                    align: 'center',
+                    width: 80
+                }, {
+                    field: 'wfaddress',
+                    title: '详细地址',
+                    align: 'center',
+                    width: 200,
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    width: 150,
+                    align: 'center',
+                    toolbar: '#barDemo'
+                }]
+            ],
+            done: function(res, curr, count) {
+                authority(res.status); //对返回结果进行验证
+            },
+            loading: true,
+            //method: 'post'
+        });
+
+        //监听搜索表单提交
+        form.on('submit(pro7search)', function(data) {
+            var result = data.field.keyword.replace();
+            //带条件查询
+            tableIns.reload({
+                url: '/api/search?pId='+product7GroupId+'&keyword=' + result
+            });
+            return false;
+        });
+
+        //监听工具条
+        table.on('tool(pro7)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'detail') { //查看
+                var d = {
+                    user: data,
+                };
+                //do something
+                laytpl($('#pro7edit-tpl').html()).render(d, function(html) {
+                    layer.open({
+                        type: 1,
+                        title: '查看数据',
+                        content: html,
+                        area: ['800px', '600px'],
+                        btn: ['关闭']
+                    });
+                });
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的要删除这条数据吗', function(index) {
+
+                    //向服务端发送删除指令
+                    $.get('/api/del?pId='+product7GroupId+'&id='+data.id, function (data){
+                        if (data.code) {
+                            obj.del(); //删除对应行（tr）的DOM结构
+                            layer.close(index);
+                            layer.msg('删除成功');
+                        }else {
+                            layer.msg('删除失败');
+                        }
+                    })
+                });
+            } else if (layEvent === 'edit') { //编辑
+                var d = {
+                    user: data,
+                };
+
+                //do something
+                laytpl($('#pro7edit-tpl').html()).render(d, function(html) {
+                    layer.open({
+                        type: 1,
+                        title: '编辑数据',
+                        content: html,
+                        area: ['800px', '600px'],
+                        btn: ['提交', '取消'],
+                        yes: function(index, layero) {
+                            var editData = {
+                                pId: product7GroupId,
+                                id: $('#proId').val(),
+                                describe: $('#describe').val(),
+                                name: $('#name').val(),
+                                submitTime: Date.parse(new Date()),
+                                tel: $('#tel').val(),
+                                wfprovince: $('#wfprovince').val(),
+                                wfcity: $('#wfcity').val(),
+                                wfarea: $('#wfarea').val(),
+                                wfaddress: $('#wfaddress').val()
+                            }
+
+                            $.post('/api/edit', editData, function (data){
+                                var data = JSON.parse(data);
+                                if(data.code) {
+                                    layer.close(index);
+                                    layer.msg('修改成功!');
+                                    // 更新table
+                                    tableIns.reload({
+                                    });
+                                }else {
+                                    layer.msg('修改失败!请刷新重试...');
+                                }
+                            })
+                            //$('form[lay-filter="pro7form-edit"]').find('button[lay-submit]').click();
+                        },
+                        // btn2: function(index, layero) {
+                        //     $('form[lay-filter="pro7form-edit"]').find('button[type="reset"]').click();
+                        //     return false;
+                        // },
+                        success: function() {
+                            form.render(null, 'pro7form-edit');
+                        }
+                    });
+                });
+                //同步更新缓存对应的值
+                // obj.update({
+                //     username: '123',
+                //     title: 'xxx'
+                // });
+            }
+        });
+
+        // 监听已读未读
+        form.on('switch(isRead)', function(obj){
+            $.get('/api/isRead',{pId: product7GroupId,id: this.value,isRead: Number(obj.elem.checked)}, function(res) {
+                if (res.code) {
+                    layer.tips('更新成功', obj.othis);
+                }else {
+                    layer.tips('更新失败！！！请刷新重试', obj.othis);
+                }
+
+            });
+        });
+
+        form.render(null, 'kit-search-form');
+        // $('#kit-search-more').on('click', function() {
+        //     $('.kit-search-mored').toggle();
+        // });
+        var editIndex;
+        form.on('submit(pro7formEdit)', function(data) {
+            editIndex && layer.close(editIndex); //关闭弹出层
+
+            // 向后台发送数据
+
+            // 更新table
+            tableIns.reload({
+            });
+            return false;
+        });
+        $('#pro7Btns').children('a').off('click').on('click', function() {
+            var $that = $(this),
+                action = $that.data('action');
+            switch (action) {
+                case 'add':
+                    layer.msg('此功能正在开发中...');
+                    return
+                    var d = {
+                        user: {
+                            submitTime: Date.parse(new Date()),
+                            describe: '',
+                            name: '',
+                            tel: '',
+                            wfprovince: '',
+                            wfcity: '',
+                            wfarea: '',
+                            wfaddress: ''
+                        }
+                    };
+                    //渲染
+                    laytpl($('#pro7edit-tpl').html()).render(d,
+                        function(html) {
+                            layer.open({
+                                type: 1,
+                                title: '新增数据',
+                                content: html,
+                                wfarea: ['800px', '600px'],
+                                btn: ['提交', '取消'],
+                                yes: function(index, layero) {
+                                    editIndex = index;
+                                    $('form[lay-filter="pro7form-edit"]').find('button[lay-submit]').click();
+                                },
+                                success: function() {
+                                    form.render(null, 'pro7form-edit');
+                                }
+                            });
+                        });
+                    break;
+                case 'del-bulk':
+                    var d = table.checkStatus('pro7');
+                    if (d.data.length === 0) {
+                        layer.msg('请选择要删除的数据');
+                        return;
+                    }
+                    layer.confirm('真的要删除选中的数据吗', function (index){
+                        var data = d.data,
+                            ids = [];
+                        layui.each(data, function(index, item) {
+                            ids.push(item.id);
+                        });
+
+                        // 删除当前选中行
+
+                        //获取当前table的 lay-item-id 元素
+                        var currentItemIdEle = $('.layui-tab-item[lay-item-id="'+product7GroupId+'"]');
+                        var tableContainer = currentItemIdEle.find('.layui-table-view');
+                        tableContainer.find('input[name="layTableCheckbox"]:checked').each(function(){
+                            var that = this;
+                            // 页面表由多个table组合而成 获取当前行的索引以后 需要在这几个table做相应删除  然后取消当前选中的状态
+                            $.get('/api/del?pId='+product7GroupId+'&id='+ids.join(','), function (data){
+                                if(data.code) {
+                                    var index = $(that).parents('tr').index();
+                                    currentItemIdEle.find('.layui-table').each(function(i, v) {
+                                        $(this).find('tr').eq(index).remove();
+                                    });
+                                    $(that).next().removeClass('layui-form-checked')
+                                    layer.msg('删除成功');
+                                }else {
+                                    layer.msg('删除失败');
+                                }
+                            })
+
+                        })
+
+                        layer.close(index);
+                    })
+
+                    break;
+            }
+        });
+    });
+
+
+
+</script>
